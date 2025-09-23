@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('model_has_social_media_platforms', function (Blueprint $table) {
+        Schema::create('event_reservation_tickets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('social_media_platform_id');
-            $table->morphs('model');
-
-            $table->foreign('social_media_platform_id')->references('id')->on('social_media_platforms');
             $table->timestamps();
         });
     }
@@ -26,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('model_has_social_media_platforms');
+        Schema::dropIfExists('event_reservation_tickets');
     }
 };
