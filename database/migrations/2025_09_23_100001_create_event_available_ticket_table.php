@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_reservation_tickets', function (Blueprint $table) {
+        Schema::create('event_available_ticket', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('event_reservation_id');
             $table->unsignedBigInteger('event_ticket_type_id');
-            $table->integer('quantity');
+            $table->integer('available_tickets');
 
-            $table->foreign('event_reservation_id')->references('id')->on('event_reservation');
-            $table->foreign('event_ticket_type')->references('id')->on('event_ticket_type');
-
+            $table->foreign('event_ticket_type_id')->references('id')->on('event_ticket_type');
             $table->timestamps();
-
         });
     }
 
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('event_reservation_tickets');
+        Schema::dropIfExists('event_available_ticket');
     }
 };
