@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_reservation_tickets', function (Blueprint $table) {
+        Schema::create('payment_intent', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('event_reservation_id');
-            $table->unsignedBigInteger('event_ticket_type_id');
-            $table->integer('quantity');
-
-            $table->foreign('event_reservation_id')->references('id')->on('event_reservation');
-            $table->foreign('event_ticket_type')->references('id')->on('event_ticket_type');
-
+            $table->unsignedBigInteger('payment_method_id');
+            $table->decimal('total_amount');
+            $table->unsignedBigInteger('curreny_id');
+            $table->string('statement_descriptor');
             $table->timestamps();
-
         });
     }
 
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('event_reservation_tickets');
+        Schema::dropIfExists('payment_intent');
     }
 };
