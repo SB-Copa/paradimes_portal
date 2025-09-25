@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->unsignedBigInteger('promotion_condition_id');
+
+            $table->foreign('promotion_condition_id')->references('id')->on('promotion_condition');
             $table->timestamps();
         });
     }

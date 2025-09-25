@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('quantity');
 
             $table->foreign('event_reservation_id')->references('id')->on('event_reservation');
-            $table->foreign('event_ticket_type')->references('id')->on('event_ticket_type');
+            $table->foreign('event_ticket_type_id')->references('id')->on('event_ticket_type');
 
             $table->timestamps();
 

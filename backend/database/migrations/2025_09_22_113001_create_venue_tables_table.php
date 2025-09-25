@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('venue_id');
             $table->integer('capacity');
             $table->string('name');
+
+            $table->foreign('venue_id')->references('id')->on('venues');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('venue_tables');
+        Schema::dropIfExists('venues_tables');
     }
 };

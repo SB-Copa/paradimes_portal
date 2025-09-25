@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('venue_table_reservation', function (Blueprint $table) {
             $table->id();
-            $table->uuid('venue_table_reservation_unique_id');
+            $table->uuid('venue_tables_reservation_unique_id');
             $table->unsignedBigInteger('venue_table_id');
             $table->unsignedBigInteger('venue_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('reservation_holder_type_id');
 
-            $table->foreign('venue_table_id')->references('id')->on('venue_table')->onDelete('cascade');
-            $table->foreign('venue_id')->references('id')->on('venue')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
-            $table->foreign('reservation_holder_type_id')->references('id')->on('reservation_holder_type_reservation');
+            $table->foreign('venue_table_id')->references('id')->on('venue_tables')->onDelete('cascade');
+            $table->foreign('venue_id')->references('id')->on('venues')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('reservation_holder_type_id')->references('id')->on('reservation_holder_type');
             
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('venue_table_reservation');
+        Schema::dropIfExists('venue_tables_reservation');
     }
 };

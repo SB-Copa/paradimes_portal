@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_marketing_owner', function (Blueprint $table) {
+        Schema::create('events_marketing_owners', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('marketing_owner_id');
             $table->unsignedBigInteger('event_id');
@@ -22,7 +22,7 @@ return new class extends Migration
             
             $table->foreign('marketing_owner_id')->references('id')->on('marketing_owners')->onDelete('cascade');
             $table->foreign('event_id')->references('id')->on('events');
-            $table->foreign('marketing_company_id')->references('id')->on('marketing_company');
+            $table->foreign('marketing_company_id')->references('id')->on('marketing_companies');
             $table->foreign('marketing_owner_type_id')->references('id')->on('marketing_owner_type');
 
             $table->timestamps();
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('event_marketing_owner');
+        Schema::dropIfExists('events_marketing_owners');
     }
 };

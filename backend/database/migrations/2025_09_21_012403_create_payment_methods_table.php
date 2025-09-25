@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('social_media_platforms', function (Blueprint $table) {
+        Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-            $table->string('social_media_platform')->unique();
+            $table->unsignedBigInteger('payment_method_type_id');
+            $table->json('billing_details');
+
+            $table->foreign('payment_method_type_id')->references('id')->on('payment_method_type');
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('social_media_platforms');
+        Schema::dropIfExists('payment_methods');
     }
 };

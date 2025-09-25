@@ -30,8 +30,8 @@ return new class extends Migration
             $table->unsignedBigInteger('event_type_id');
             $table->unsignedBigInteger('event_ticket_type_id');
 
-            $table->foreign('marketing_company_id')->references('id')->on('marketing_company')->onDelete('cascade');
-            $table->foreign('venue_id')->references('id')->on('venue')->onDelete('cascade');
+            $table->foreign('marketing_company_id')->references('id')->on('marketing_companies')->onDelete('cascade');
+            $table->foreign('venue_id')->references('id')->on('venues')->onDelete('cascade');
             $table->foreign('event_type_id')->references('id')->on('event_type');
             $table->timestamps();
         });
