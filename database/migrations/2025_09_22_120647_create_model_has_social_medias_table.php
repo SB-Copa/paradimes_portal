@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_ticket_type', function (Blueprint $table) {
+        Schema::create('model_has_social_medias', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('event_id');
-            $table->string('event_ticket_type');
-            $table->string('description');
-            $table->decimal('price');
+            $table->unsignedBigInteger('social_media_id');
+            $table->morphs('model');
 
-            $table->foreign('event_id')->references('id')->on('events');
-
+            $table->foreign('social_media_id')->references('id')->on('social_medias');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('event_ticket_type');
+        Schema::dropIfExists('model_has_social_medias');
     }
 };

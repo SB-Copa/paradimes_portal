@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('payment_intent', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('event_reservation_id');
+            // $table->unsignedBigInteger('event_reservation_id');
             $table->unsignedBigInteger('payment_method_id');
             $table->decimal('total_amount');
             $table->unsignedBigInteger('curreny_id');
             $table->string('statement_descriptor');
+
+            // $table->foreign('event_reservation_id')->references('id')->on('event_reservation');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods');
             $table->timestamps();
         });
     }

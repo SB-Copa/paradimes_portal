@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('promotion', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description');
-            $table->decimal('percentage');
-            $table->decimal('value');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->integer('usage_limit');
-            
+            $table->unsignedBigInteger('payment_method_id');
+            $table->unsignedBigInteger('payment_intent_id');
+            $table->decimal('total_amount');
+            $table->unsignedBigInteger('currency_id');
+            $table->json('webhook_event');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('promotion');
+        Schema::dropIfExists('payments');
     }
 };

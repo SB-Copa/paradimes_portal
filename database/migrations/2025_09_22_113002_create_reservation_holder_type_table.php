@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservation_type_holder', function (Blueprint $table) {
+        Schema::create('reservation_holder_type', function (Blueprint $table) {
             $table->id();
             $table->string('reservation_holder_type');
             $table->timestamps();
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservation_type_holder');
+        Schema::dropIfExists('reservation_holder_type');
     }
 };
