@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_method_type', function (Blueprint $table) {
+        Schema::create('model_has_artist', function (Blueprint $table) {
             $table->id();
-            $table->string('method_type');
+            $table->unsignedBigInteger('artist_id');
+            $table->morphs('model');
+            $table->foreign('artist_id')->references('id')->on('artists');
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment_method_type');
+        Schema::dropIfExists('model_has_artist');
     }
 };

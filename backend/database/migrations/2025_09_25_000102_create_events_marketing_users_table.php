@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events_marketing_owners', function (Blueprint $table) {
+        Schema::create('events_marketing_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('marketing_owner_id');
+            $table->unsignedBigInteger('marketing_user_id');
             $table->unsignedBigInteger('event_id');
             $table->unsignedBigInteger('marketing_company_id');
-            $table->unsignedBigInteger('marketing_owner_type_id');
+
 
 
             
-            $table->foreign('marketing_owner_id')->references('id')->on('marketing_owners')->onDelete('cascade');
+            $table->foreign('marketing_user_id')->references('id')->on('marketing_users')->onDelete('cascade');
             $table->foreign('event_id')->references('id')->on('events');
             $table->foreign('marketing_company_id')->references('id')->on('marketing_companies');
-            $table->foreign('marketing_owner_type_id')->references('id')->on('marketing_owner_type');
+
 
             $table->timestamps();
         });

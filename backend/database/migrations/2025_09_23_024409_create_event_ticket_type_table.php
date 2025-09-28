@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('event_ticket_type', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('event_id');
-            $table->string('event_ticket_type');
+            $table->string('ticket_type')->unique();
             $table->string('description');
             $table->decimal('price');
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('promotion_condition', function (Blueprint $table) {
             $table->id();
-            $table->string('promotion_condition');
+            $table->string('condition');
             $table->timestamps();
         });
     }

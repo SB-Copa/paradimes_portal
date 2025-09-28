@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('promotion_type', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
             $table->string('name');
             $table->string('description')->nullable();
             $table->unsignedBigInteger('promotion_condition_id');
