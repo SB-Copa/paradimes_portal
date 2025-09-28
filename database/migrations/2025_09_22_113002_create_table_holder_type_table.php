@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservation_holder_type');
+        Schema::dropIfExists('table_holder_type');
     }
 };
