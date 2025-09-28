@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_method_type', function (Blueprint $table) {
+        Schema::create('model_has_status', function (Blueprint $table) {
             $table->id();
-            $table->string('method_type');
+            $table->morphs('model');
+            $table->unsignedBigInteger('status_id');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->timestamps();
+
+            $table->foreign('status_id')->references('id')->on('status');
         });
     }
 
@@ -23,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment_method_type');
+        Schema::dropIfExists('model_has_status');
     }
 };

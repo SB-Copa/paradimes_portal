@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('description');
             $table->decimal('percentage');
             $table->decimal('value');
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->unsignedBigInteger('promotion_type_id');
             $table->integer('usage_limit');
 

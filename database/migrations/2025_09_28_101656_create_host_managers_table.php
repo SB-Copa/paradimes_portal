@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('marketing_owners', function (Blueprint $table) {
+        Schema::create('host_managers', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
             $table->string('middle_name')->nullable();
@@ -28,9 +28,11 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-
             $table->foreign('sex_id')->references('id')->on('sex');
             $table->foreign('suffix_id')->references('id')->on('suffix');
+            $table->unsignedBigInteger('marketing_user_id');
+
+            $table->foreign('marketing_user_id')->references('id')->on('marketing_users');
             $table->timestamps();
         });
     }
@@ -40,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('marketing_owners');
+        Schema::dropIfExists('host_managers');
     }
 };

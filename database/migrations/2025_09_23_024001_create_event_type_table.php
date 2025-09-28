@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('event_type', function (Blueprint $table) {
             $table->id();
-            $table->string('event_type');
+            $table->string('type');
             $table->timestamps();
         });
     }

@@ -17,12 +17,14 @@ return new class extends Migration
             $table->unsignedBigInteger('venue_table_id');
             $table->unsignedBigInteger('venue_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('reservation_holder_type_id');
+            $table->unsignedBigInteger('non_registered_user_id');
+            $table->unsignedBigInteger('table_holder_type_id');
 
             $table->foreign('venue_table_id')->references('id')->on('venue_tables')->onDelete('cascade');
             $table->foreign('venue_id')->references('id')->on('venues')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('reservation_holder_type_id')->references('id')->on('reservation_holder_type');
+            $table->foreign('table_holder_type_id')->references('id')->on('table_holder_type');
+            $table->foreign('non_registered_user_id')->references('id')->on('non_registered_user');
             
             $table->timestamps();
         });
