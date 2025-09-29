@@ -40,9 +40,13 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'marketing_owner_session' => [
+        'marketing_users_session' => [
             'driver' => 'session',
-            'provider' => 'marketing_owner'
+            'provider' => 'marketing_users'
+        ],
+        'marketing_users_sanctum' => [
+            'driver' => 'sanctum',
+            'provider' => 'marketing_users'
         ]
     ],
 
@@ -68,9 +72,9 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-        'marketing_owner' => [
+        'marketing_users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Marketing\MarketingOwnerModel::class,
+            'model' => App\Models\Marketings\MarketingUsersModel::class,
         ]
 
 

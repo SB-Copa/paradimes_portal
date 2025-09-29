@@ -8,13 +8,13 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class MarketingOwnersModel extends Authenticatable
+class MarketingUsersModel extends Authenticatable
 {
     //
 
     use HasFactory, HasApiTokens, Notifiable;
 
-    protected $table = 'marketing_owners';
+    protected $table = 'marketing_users';
 
     protected $fillable = [
         'first_name',
@@ -30,6 +30,7 @@ class MarketingOwnersModel extends Authenticatable
         'password',
         'contact_number',
         'birthdate',
+        'marketing_user_type_id'
     ];
 
 

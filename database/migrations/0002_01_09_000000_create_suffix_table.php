@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('suffix', function (Blueprint $table) {
             $table->id();
-            $table->string('suffix');
+            $table->string('suffix')->unique();
             $table->timestamps();
         });
     }

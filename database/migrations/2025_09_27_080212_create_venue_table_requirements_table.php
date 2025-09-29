@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('price');
 
             $table->foreign('venue_table_id')->references('id')->on('venue_tables');
-            $table->foreign('requirements_type_id')->references('id')->on('table_requirement_types');
+            $table->foreign('requirements_type_id')->references('id')->on('venue_table_requirement_types');
             $table->timestamps();
         });
     }

@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Marketings\MarketingOwnerModel;
+use App\Models\Marketings\MarketingUsersModel;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class MarketingOwnerSeeder extends Seeder
+class MarketingUsersSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,7 +16,7 @@ class MarketingOwnerSeeder extends Seeder
     public function run(): void
     {
         //
-        MarketingOwnerModel::create([
+        MarketingUsersModel::create([
             'first_name' => 'Juan',
             'middle_name' => 'Mendez',
             'last_name' => 'Dela Cruz',
@@ -30,6 +30,7 @@ class MarketingOwnerSeeder extends Seeder
             'contact_number' => '09064826722',
             'birthdate' => '1998-10-28',
             'password' => Hash::make('admin'),
+            'marketing_user_type_id' => '1'
         ]);
     }
 }

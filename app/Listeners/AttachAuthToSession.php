@@ -28,6 +28,8 @@ class AttachAuthToSession
 
         $sessionId = SessionManager::getId();
 
+        SessionManager::save();
+
         SessionModel::where('id', $sessionId)->update([
             'authenticatable_id'   => $event->user->id,
             'authenticatable_type' => get_class($event->user), 

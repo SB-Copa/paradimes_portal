@@ -25,14 +25,14 @@ return new class extends Migration
             $table->integer('capacity');
             $table->integer('user_count');
             $table->integer('table_count');
-            $table->json('menu_images');
-            $table->json('banner_images');
-            $table->json('carousel_images');
-            $table->text('menu');
-            $table->text('about');
+            $table->json('menu_images')->nullable();
+            $table->json('banner_images')->nullable();
+            $table->json('carousel_images')->nullable();
+            $table->text('menu')->nullable();
+            $table->text('about')->nullable();
             $table->unsignedBigInteger('venue_status_id');
 
-            $table->foreign('venue_status_id')->references('id')->on('venue_status');
+            $table->foreign('venue_status_id')->references('id')->on('venue_statuses');
             
             $table->timestamps();
         });
