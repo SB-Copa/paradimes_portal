@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Marketing\MarketingOwnerModel;
+use App\Models\Marketings\MarketingOwnerModel;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

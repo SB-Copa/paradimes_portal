@@ -32,7 +32,7 @@ return new class extends Migration
             $table->foreign('suffix_id')->references('id')->on('suffix');
             $table->unsignedBigInteger('marketing_user_type_id');
 
-            $table->foreign('marketing_user_type_id')->references('id')->on('marketing_user_type');
+            $table->foreign('marketing_user_type_id')->references('id')->on('marketing_user_types');
             $table->timestamps();
         });
 

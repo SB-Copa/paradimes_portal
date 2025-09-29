@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_methods', function (Blueprint $table) {
+        Schema::create('event_ticket_types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('payment_method_type_id');
-            $table->json('billing_details');
+            $table->unsignedBigInteger('event_id');
+            $table->string('ticket_type')->unique();
+            $table->string('description');
+            $table->decimal('price');
 
-            $table->foreign('payment_method_type_id')->references('id')->on('payment_method_types');
+            $table->foreign('event_id')->references('id')->on('events');
+
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment_methods');
+        Schema::dropIfExists('event_ticket_types');
     }
 };
