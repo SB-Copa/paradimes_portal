@@ -30,6 +30,7 @@ class VenuesModel extends Model
         'carousel_images',
         'menu',
         'about',
+        'venue_status_id'
     ];
 
     protected $casts = [

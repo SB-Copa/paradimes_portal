@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\PersonalDetails\SexModel;
-use App\Models\SuffixModel;
+
+use App\Models\PersonalDetails\SuffixModel;
+
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -30,8 +31,8 @@ class SuffixSeeder extends Seeder
 
 
         foreach($suffix as $key => $value){
-            SexModel::create([
-                "sex" => $value,
+            SuffixModel::create([
+                "suffix" => $value,
             ]);
         }
         

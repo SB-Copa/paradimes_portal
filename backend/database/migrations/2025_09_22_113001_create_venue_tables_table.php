@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('capacity');
             $table->string('name');
 
-            $table->foreign('venue_table_status_id')->references('id')->on('venue_table_status');
+            $table->foreign('venue_table_status_id')->references('id')->on('venue_table_statuses');
             $table->foreign('venue_id')->references('id')->on('venues');
             $table->timestamps();
         });

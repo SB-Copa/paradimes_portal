@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('venue_status', function (Blueprint $table) {
+        Schema::create('venue_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('status');
+            $table->string('status')->unique();
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('venue_status');
+        Schema::dropIfExists('venue_statuses');
     }
 };

@@ -20,7 +20,7 @@ return new class extends Migration
             
   
             $table->unsignedBigInteger('venue_table_reservation_id');
-            $table->unsignedBigInteger('promotion_id');
+            // $table->unsignedBigInteger('promotion_id');
             $table->unsignedBigInteger('payment_intent_id');
             $table->morphs('host_model');
 
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('event_id')->references('id')->on('events');
             $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
-            $table->foreign('promotion_id')->references('id')->on('promotions');
+            // $table->foreign('promotion_id')->references('id')->on('promotions');
             $table->foreign('payment_intent_id')->references('id')->on('payment_intents');
             
 

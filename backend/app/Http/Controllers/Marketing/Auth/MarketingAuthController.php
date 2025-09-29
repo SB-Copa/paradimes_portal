@@ -25,8 +25,8 @@ class MarketingAuthController extends Controller
 
 
 
-        if(Auth::guard('marketing_owner_session')->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])){
-            $request->session()->regenerate();
+        if(Auth::guard('marketing_users_session')->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])){
+            // $request->session()->regenerate();
             // return redirect()->intended('/admin'); 
 
             return response()->json('Authenticated');
@@ -35,6 +35,8 @@ class MarketingAuthController extends Controller
         }
 
         //Stateless
+
+        
         // $user = MarketingOwnerModel::where('email', $request->username)->first();
         
 

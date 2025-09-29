@@ -25,7 +25,9 @@ class DatabaseSeeder extends Seeder
             SuffixSeeder::class,
             SexSeeder::class,
             AddressSeeder::class,
-            MarketingOwnerSeeder::class,
+            MarketingUserTypesSeeder::class,
+            MarketingUsersSeeder::class,
+            VenueStatusesSeeder::class,
         ]);
     }
 }
