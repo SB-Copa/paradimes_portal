@@ -30,6 +30,9 @@ return new class extends Migration
             $table->json('carousel_images');
             $table->text('menu');
             $table->text('about');
+            $table->unsignedBigInteger('venue_status_id');
+
+            $table->foreign('venue_status_id')->references('id')->on('venue_status');
             
             $table->timestamps();
         });
