@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Venues\VenueStatusesModel;
+use App\Models\Marketings\EventsMarketingUsers;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class VenueStatusesSeeder extends Seeder
+class EventMarketingUsersSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,8 +15,9 @@ class VenueStatusesSeeder extends Seeder
     {
         //
 
-        VenueStatusesModel::firstOrCreate([
-            'status' => 'Open'
+        EventsMarketingUsers::firstOrCreate([
+
+            
         ]);
     }
 }

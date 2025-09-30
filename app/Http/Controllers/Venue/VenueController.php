@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Venue;
 
 use App\Http\Controllers\Controller;
 use App\Models\Venues\VenuesModel;
+use App\Models\Venues\VenueTableRequirementsModel;
+use App\Models\Venues\VenueTablesModel;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -37,12 +40,13 @@ class VenueController extends Controller
     public function store(Request $request)
     {
         //
-          
+
+
           DB::beginTransaction();
 
                 try {
 
-                $validator = Validator::make($request->all(), [
+                $validator = Validator::make($request->venue, [
                     'name' => 'required|string|unique:venues,name',
                     'address' => 'nullable|string',
                     'region_id' => 'required|string|exists:refregion,regCode',
@@ -53,9 +57,9 @@ class VenueController extends Controller
                     'email' => 'nullable|email|max:255',
                     'websites' => 'nullable|array',
                     'websites.*' => 'url',
-                    'capacity' => 'required|integer|min:0',
+                    'capacity' => 'required|integer|min:1',
                     'user_count' => 'required|integer|min:0',
-                    'table_count' => 'required|integer|min:0',
+                    'table_count' => 'required|integer|min:1',
                     'menu_images' => 'nullable|array',
                     'menu_images.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
                     'banner_images' => 'nullable|array',
@@ -76,8 +80,8 @@ class VenueController extends Controller
                 }
 
 
-                $data = $validator->validated();
-                $venue = VenuesModel::create($data);
+            $data = $validator->validated();
+            $venue = VenuesModel::create($data);
 
                 
          
@@ -123,9 +127,56 @@ class VenueController extends Controller
                 }
             }
 
-                DB::commit();
+            /**
+             * 
+             * Add table
+             * 
+             * 
+             */
+     
+            if($request->venue['table_count'] != count($request->venue_tables)){
+               return response()->json('Table count and venue tables mismatch.',400);
+            }
+            
+            
+            foreach($request->venue->venue_tables as $key1 => $value1){
+                
+                $venueTables = VenueTablesModel::firstOrCreate([
+                    'venue_id' => $venue->id,
+                    'capacity' => $value1['capacity'],
+                    'venue_table_status_id' => $value1['venue_table_status_id'],
+                    'user_type' => get_class(Auth::user()),
+                    'user_id' => Auth::user()->id,
+                    'name' => $value1['name'],
+                ]);
+                
 
-                return response()->json($venue, 201);
+                /*
+                 * 
+                 * When venue owner can create table requirements 
+                 * will focus on events can add table requirements
+                 * 
+                 */
+
+
+                // if(!empty($value1['venue_table_requirements'])){
+                //     foreach($value1['venue_table_requirements'] as $key2 => $value2){
+        
+                //         VenueTableRequirementsModel::firstOrCreate([
+                //             'name' => $value2['name'],
+                //             'description' => $value2['description'],
+                //             'venue_table_id' => $venueTables->id,
+                //             'venue_table_requirement_type_id' => $value2['venue_table_requirement_type_id'],
+                //             'quantity' => $value2['quantity'],
+                //             'price' => $value2['price']
+                //         ]);
+                //     }
+                // }
+            }
+
+            DB::commit();
+
+            return response()->json($venue, 201);
         } catch (Exception $e) {
             // Rollback on error
             DB::rollBack();

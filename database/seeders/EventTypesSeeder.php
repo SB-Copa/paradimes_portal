@@ -16,7 +16,7 @@ class EventTypesSeeder extends Seeder
         //
 
         EventTypesModel::firstOrCreate([
-            'type' => 'NIGHT'
+            'type' => 'Night'
         ]);
     }
 }

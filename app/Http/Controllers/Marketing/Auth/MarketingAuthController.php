@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class MarketingAuthController extends Controller
 {
@@ -26,8 +27,17 @@ class MarketingAuthController extends Controller
 
 
         if(Auth::guard('marketing_users_session')->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])){
-            // $request->session()->regenerate();
+            $request->session()->regenerate();
             // return redirect()->intended('/admin'); 
+
+            session()->save();
+
+            // Update the session row AFTER it exists
+            DB::table('sessions')->where('id', session()->getId())->update([
+                'authenticatable_id' => Auth::guard('marketing_users_session')->id(),
+                'authenticatable_type' => get_class(Auth::guard('marketing_users_session')->user()),
+            ]);
+            
 
             return response()->json('Authenticated');
         }else{

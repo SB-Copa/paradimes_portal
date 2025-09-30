@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('venue_table_requirements', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
             $table->string('name');
-            $table->string('description');
-            $table->unsignedBigInteger('requirements_type_id');
+            $table->text('description');
+            $table->unsignedBigInteger('venue_table_requirement_type_id');
             $table->unsignedBigInteger('venue_table_id');
             $table->integer('quantity');
             $table->decimal('price');
 
             $table->foreign('venue_table_id')->references('id')->on('venue_tables');
-            $table->foreign('requirements_type_id')->references('id')->on('venue_table_requirement_types');
+            $table->foreign('venue_table_requirement_type_id')->references('id')->on('venue_table_requirement_types');
             $table->timestamps();
         });
     }

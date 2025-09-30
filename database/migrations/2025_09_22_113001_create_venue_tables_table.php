@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('venue_table_status_id');
             $table->integer('capacity');
             $table->string('name');
+            $table->morphs('user');
 
             $table->foreign('venue_table_status_id')->references('id')->on('venue_table_statuses');
             $table->foreign('venue_id')->references('id')->on('venues');
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('venues_tables');
+        Schema::dropIfExists('venues_table');
     }
 };

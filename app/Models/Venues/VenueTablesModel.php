@@ -14,6 +14,9 @@ class VenueTablesModel extends Model
 
     protected $fillable = [
         'venue_id',
+        'user_type',
+        'user_id',
+        'venue_table_status_id',
         'capacity',
         'name',
     ];
