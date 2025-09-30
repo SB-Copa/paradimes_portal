@@ -26,13 +26,13 @@ class AttachAuthToSession
     {
         //
 
-        $sessionId = SessionManager::getId();
+        // $sessionId = SessionManager::getId();
 
-        SessionManager::save();
+        // SessionManager::save();
 
-        SessionModel::where('id', $sessionId)->update([
-            'authenticatable_id'   => $event->user->id,
-            'authenticatable_type' => get_class($event->user), 
-        ]);
+        // SessionModel::where('id', $sessionId)->update([
+        //     'authenticatable_id'   => $event->user->id,
+        //     'authenticatable_type' => get_class($event->user), 
+        // ]);
     }
 }

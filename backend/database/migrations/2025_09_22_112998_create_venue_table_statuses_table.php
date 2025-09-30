@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('venue_table_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('table_status');
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
             $table->timestamps();
         });
     }
