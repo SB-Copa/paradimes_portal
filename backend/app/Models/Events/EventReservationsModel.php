@@ -17,7 +17,7 @@ class EventReservationsModel extends Model
         'event_reservation_unique_id',
         'event_id',
         'user_id',
-        'non_registered_user_id',
+        'user_type',
         'venue_table_reservation_id',
         'promotion_id',
         'payment_intent_id',

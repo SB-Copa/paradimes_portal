@@ -26,6 +26,6 @@ class VerifyCsrfToken extends Middleware
         '/login',      
         '/logout',
         '/api/sent-sms/webhook', //added by dreii
-        '/api/add-venue'
+        '/api/*'
     ];
 }

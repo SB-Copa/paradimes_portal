@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\Interfaces\VenueRepositoryInterface;
+use App\Repositories\VenueRepository;
 use Illuminate\Support\ServiceProvider;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,6 +15,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+
+        $this->app->bind(VenueRepositoryInterface::class, VenueRepository::class);
     }
 
     /**
