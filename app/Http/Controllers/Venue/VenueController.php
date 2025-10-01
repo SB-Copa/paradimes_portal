@@ -46,7 +46,7 @@ class VenueController extends Controller
 
                 try {
 
-                $validator = Validator::make($request->venue, [
+                $venue_validator = Validator::make($request->venue, [
                     'name' => 'required|string|unique:venues,name',
                     'address' => 'nullable|string',
                     'region_id' => 'required|string|exists:refregion,regCode',
@@ -69,19 +69,21 @@ class VenueController extends Controller
                     'menu' => 'nullable|string',
                     'about' => 'nullable|string',
                     'venue_status_id' => 'required|integer|exists:venue_statuses,id',
+                    
                 ]);
 
 
 
-                if ($validator->fails()) {
+                if ($venue_validator->fails()) {
+                    DB::rollBack();
                     return response()->json([
-                        'errors' => $validator->errors()
+                        'errors' => $venue_validator->errors()
                     ], 422);
                 }
 
 
-            $data = $validator->validated();
-            $venue = VenuesModel::create($data);
+            $venue_data = $venue_validator->validated();
+            $venue = VenuesModel::create($venue_data);
 
                 
          
@@ -133,13 +135,38 @@ class VenueController extends Controller
              * 
              * 
              */
-     
-            if($request->venue['table_count'] != count($request->venue_tables)){
+   
+            $table_validator = Validator::make($request->venue,[
+                    'venue_tables' => 'array',
+                    // 'venue_tables.*.venue_id' => 'required|exists:venues,id',
+                    'venue_tables.*.venue_table_status_id' => 'required|exists:venue_table_statuses,id',
+                    'venue_tables.*.capacity' => 'required|integer|min:1',
+                    'venue_tables.*.name' => 'required|string',
+                    'venue_tables.*.venue_table_requirements' => 'nullable|array',
+                    'venue_tables.*.venue_table_requirements.*.name' => 'required|string',
+                    'venue_tables.*.venue_table_requirements.*.description' => 'nullable|string',
+                    'venue_tables.*.venue_table_requirements.*.venue_table_requirement_type_id' => 'required|exists:venue_table_requirement_types,id',
+                    'venue_tables.*.venue_table_requirements.*.quantity' => 'required|integer|min:1',
+                    'venue_tables.*.venue_table_requirements.*.price' => 'required|decimal',
+            ]);
+
+      
+            
+            if($table_validator->fails()){
+                DB::rollBack();
+                return response()->json([
+                    'errors' => $table_validator->errors()
+                ], 422);
+            }
+          
+            
+
+            if($request->venue['table_count'] != count($request->venue['venue_tables'])){
                return response()->json('Table count and venue tables mismatch.',400);
             }
             
             
-            foreach($request->venue->venue_tables as $key1 => $value1){
+            foreach($request->venue['venue_tables'] as $key1 => $value1){
                 
                 $venueTables = VenueTablesModel::firstOrCreate([
                     'venue_id' => $venue->id,
@@ -176,7 +203,7 @@ class VenueController extends Controller
 
             DB::commit();
 
-            return response()->json($venue, 201);
+            return response()->json('successful', 201);
         } catch (Exception $e) {
             // Rollback on error
             DB::rollBack();
