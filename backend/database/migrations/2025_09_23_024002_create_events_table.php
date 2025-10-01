@@ -14,20 +14,20 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->uuid('event_unique_id');
-            $table->string('name');
-            $table->string('title');
+            $table->string('name')->nullable();
+            $table->string('title')->nullable();
             $table->string('description')->nullable();
             $table->text('about')->nullable();
             $table->boolean('is_recurring');
             $table->integer('capacity');
-            $table->json('menu_images');
-            $table->json('banner_images');
-            $table->json('carousel_images');
+            $table->json('menu_images')->nullable();
+            $table->json('banner_images')->nullable();
+            $table->json('carousel_images')->nullable();
 
 
             $table->unsignedBigInteger('venue_id');
             $table->unsignedBigInteger('event_type_id');
-            $table->unsignedBigInteger('event_ticket_type_id');
+
 
         
             $table->foreign('venue_id')->references('id')->on('venues')->onDelete('cascade');

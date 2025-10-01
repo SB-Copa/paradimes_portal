@@ -16,7 +16,7 @@ class MarketingUsersSeeder extends Seeder
     public function run(): void
     {
         //
-        MarketingUsersModel::create([
+        $marketing_user = MarketingUsersModel::create([
             'first_name' => 'Juan',
             'middle_name' => 'Mendez',
             'last_name' => 'Dela Cruz',
@@ -32,5 +32,7 @@ class MarketingUsersSeeder extends Seeder
             'password' => Hash::make('admin'),
             'marketing_user_type_id' => '1'
         ]);
+
+        
     }
 }

@@ -37,7 +37,7 @@ class EventsModel extends Model
         'carousel_images' => 'array',
     ];
 
-protected static function booted()
+    protected static function booted()
     {
         static::creating(function ($model) {
             if (!$model->event_unique_id) {
