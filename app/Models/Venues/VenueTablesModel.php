@@ -20,4 +20,8 @@ class VenueTablesModel extends Model
         'capacity',
         'name',
     ];
+
+    public function tableStatus(){
+        return $this->belongsTo(VenueTableStatusesModel::class,'venue_table_status_id','id');
+    }
 }

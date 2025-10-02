@@ -5,7 +5,7 @@ namespace App\Models\Payments;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PaymentIntentModel extends Model
+class PaymentIntentsModel extends Model
 {
     /** @use HasFactory<\Database\Factories\Payment\PaymentIntentModelFactory> */
     use HasFactory;

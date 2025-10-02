@@ -23,8 +23,8 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/',
         '/auth/login', 
-        '/login',      
-        '/logout',
+        '/admin/login',      
+        '/admin/logout',
         '/api/sent-sms/webhook', //added by dreii
         '/api/*'
     ];

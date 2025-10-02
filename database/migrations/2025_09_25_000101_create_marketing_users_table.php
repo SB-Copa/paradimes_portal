@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('last_name');
             $table->unsignedBigInteger('suffix_id')->nullable();
             $table->unsignedBigInteger('sex_id');
-            $table->unsignedBigInteger('regCode');
-            $table->unsignedBigInteger('provCode');
-            $table->unsignedBigInteger('citymunCode');
-            $table->unsignedBigInteger('brgyCode');
+            $table->string('regCode');
+            $table->string('provCode');
+            $table->string('citymunCode');
+            $table->string('brgyCode');
             $table->string('contact_number');
             $table->date('birthdate');
             $table->string('email')->unique();
@@ -30,9 +30,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->foreign('sex_id')->references('id')->on('sex');
             $table->foreign('suffix_id')->references('id')->on('suffix');
-            $table->unsignedBigInteger('marketing_user_type_id');
 
-            $table->foreign('marketing_user_type_id')->references('id')->on('marketing_user_types');
             $table->timestamps();
         });
 
