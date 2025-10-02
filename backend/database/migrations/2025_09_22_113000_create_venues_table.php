@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('address')->nullable();
-            $table->unsignedBigInteger('region_id');
-            $table->unsignedBigInteger('province_id');
-            $table->unsignedBigInteger('municipality_id');
-            $table->unsignedBigInteger('barangay_id');
+            $table->string('region_id');
+            $table->string('province_id');
+            $table->string('municipality_id');
+            $table->string('barangay_id');
             $table->string('contact_number');
             $table->string('email')->nullable();
             $table->json('websites')->nullable();

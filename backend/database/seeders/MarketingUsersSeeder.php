@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Marketings\MarketingCompaniesMarketingUsersModel;
+use App\Models\Marketings\MarketingCompaniesModel;
 use App\Models\Marketings\MarketingUsersModel;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -16,6 +18,14 @@ class MarketingUsersSeeder extends Seeder
     public function run(): void
     {
         //
+
+       $marketing_company = MarketingCompaniesModel::firstOrCreate([
+             'name' => 'Parallel Dimensions',
+             'description' => 'Explorative & Experiential Marketing',
+             'contact_number' => '09111111111',
+             'email' => 'paradimes@gmail.com',
+        ]);
+
         $marketing_user = MarketingUsersModel::create([
             'first_name' => 'Juan',
             'middle_name' => 'Mendez',
@@ -30,7 +40,13 @@ class MarketingUsersSeeder extends Seeder
             'contact_number' => '09064826722',
             'birthdate' => '1998-10-28',
             'password' => Hash::make('admin'),
-            'marketing_user_type_id' => '1'
+        ]);
+
+        MarketingCompaniesMarketingUsersModel::create([
+            'marketing_company_id' => $marketing_company->id,
+            'marketing_user_id' => $marketing_user->id,
+            'marketing_user_type_id' => 1,
+
         ]);
 
         

@@ -30,7 +30,6 @@ class DatabaseSeeder extends Seeder
             VenueStatusesSeeder::class,
             VenueTableStatusesSeeder::class,
             VenueTableRequirementTypesSeeder::class,
-            MarketingCompanySeeder::class,
             EventTypesSeeder::class,
         ]);
     }
