@@ -1,2 +1,5 @@
-
+!refBrgy.sql
+!refCitymun.sql
+!refProvince.sql
+!refRegion.sql
 !.gitignore
