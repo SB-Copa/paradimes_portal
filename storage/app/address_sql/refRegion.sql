@@ -37,7 +37,7 @@ SET default_with_oids = false;
 -- Name: _refregion; Type: TABLE; Schema: public; Owner: rebasedata
 --
 
-CREATE TABLE public._refregion (
+CREATE TABLE public.refRegion (
     id smallint,
     "psgcCode" integer,
     "regDesc" character varying(43) DEFAULT NULL::character varying,
@@ -45,31 +45,29 @@ CREATE TABLE public._refregion (
 );
 
 
-ALTER TABLE public._refregion OWNER TO rebasedata;
+-- ALTER TABLE public._refregion OWNER TO postgresql;
 
 --
 -- Data for Name: _refregion; Type: TABLE DATA; Schema: public; Owner: rebasedata
 --
 
-COPY public._refregion (id, "psgcCode", "regDesc", "regCode") FROM stdin;
-1	10000000	REGION I (ILOCOS REGION)	1
-2	20000000	REGION II (CAGAYAN VALLEY)	2
-3	30000000	REGION III (CENTRAL LUZON)	3
-4	40000000	REGION IV-A (CALABARZON)	4
-5	170000000	REGION IV-B (MIMAROPA)	17
-6	50000000	REGION V (BICOL REGION)	5
-7	60000000	REGION VI (WESTERN VISAYAS)	6
-8	70000000	REGION VII (CENTRAL VISAYAS)	7
-9	80000000	REGION VIII (EASTERN VISAYAS)	8
-10	90000000	REGION IX (ZAMBOANGA PENINSULA)	9
-11	100000000	REGION X (NORTHERN MINDANAO)	10
-12	110000000	REGION XI (DAVAO REGION)	11
-13	120000000	REGION XII (SOCCSKSARGEN)	12
-14	130000000	NATIONAL CAPITAL REGION (NCR)	13
-15	140000000	CORDILLERA ADMINISTRATIVE REGION (CAR)	14
-16	150000000	AUTONOMOUS REGION IN MUSLIM MINDANAO (ARMM)	15
-17	160000000	REGION XIII (Caraga)	16
-\.
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (1, 10000000, 'REGION I (ILOCOS REGION)', 1);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (2, 20000000, 'REGION II (CAGAYAN VALLEY)', 2);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (3, 30000000, 'REGION III (CENTRAL LUZON)', 3);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (4, 40000000, 'REGION IV-A (CALABARZON)', 4);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (5, 170000000, 'REGION IV-B (MIMAROPA)', 17);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (6, 50000000, 'REGION V (BICOL REGION)', 5);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (7, 60000000, 'REGION VI (WESTERN VISAYAS)', 6);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (8, 70000000, 'REGION VII (CENTRAL VISAYAS)', 7);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (9, 80000000, 'REGION VIII (EASTERN VISAYAS)', 8);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (10, 90000000, 'REGION IX (ZAMBOANGA PENINSULA)', 9);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (11, 100000000, 'REGION X (NORTHERN MINDANAO)', 10);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (12, 110000000, 'REGION XI (DAVAO REGION)', 11);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (13, 120000000, 'REGION XII (SOCCSKSARGEN)', 12);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (14, 130000000, 'NATIONAL CAPITAL REGION (NCR)', 13);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (15, 140000000, 'CORDILLERA ADMINISTRATIVE REGION (CAR)', 14);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (16, 150000000, 'AUTONOMOUS REGION IN MUSLIM MINDANAO (ARMM)', 15);
+INSERT INTO public._refregion (id, psgcCode, regDesc, regCode) VALUES (17, 160000000, 'REGION XIII (Caraga)', 16);
 
 
 --
