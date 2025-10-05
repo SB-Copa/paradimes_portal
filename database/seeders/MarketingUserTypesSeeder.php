@@ -15,8 +15,9 @@ class MarketingUserTypesSeeder extends Seeder
     {
         //
 
+        $ceo = "CEO";
         MarketingUserTypesModel::firstOrCreate([
-            'user_type' => "CEO"
+            'user_type' => $ceo
         ]);
     }
 }
