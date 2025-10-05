@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Marketing\Events;
+namespace App\Http\Controllers\Marketings\Events;
 
 use App\Http\Controllers\Controller;
 use App\Models\Events\EventsModel;

@@ -5,11 +5,11 @@ namespace App\Models\PersonalDetails;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RegionModel extends Model
+class BarangaysModel extends Model
 {
-    /** @use HasFactory<\Database\Factories\App\Models\PersonalDetails\RegionModelFactory> */
+    /** @use HasFactory<\Database\Factories\App\Models\PersonalDetails\BarangayModelFactory> */
     use HasFactory;
 
-    protected $table = 'refregion';
-    
+
+    protected $table = 'refbrgy';
 }

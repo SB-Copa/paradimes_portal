@@ -34,7 +34,7 @@ class MarketingUsersSeeder extends Seeder
             'sex_id' => '1',
             'regCode' => '1',
             'provCode' => '1',
-            'cityMunCode' => '1',
+            'citymunCode' => '1',
             'brgyCode' => '1',
             'email' => 'juandelacruz@gmail.com',
             'contact_number' => '09064826722',

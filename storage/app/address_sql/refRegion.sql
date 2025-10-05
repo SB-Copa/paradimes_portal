@@ -23,8 +23,6 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
-DROP TABLE IF EXISTS refregion;
-
 --
 -- TOC entry 217 (class 1259 OID 22147)
 -- Name: refregion; Type: TABLE; Schema: public; Owner: postgres
@@ -46,16 +44,16 @@ ALTER TABLE public.refregion OWNER TO postgres;
 -- Data for Name: refregion; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.refregion VALUES (1, '010000000', 'REGION I (ILOCOS REGION)', '01');
-INSERT INTO public.refregion VALUES (2, '020000000', 'REGION II (CAGAYAN VALLEY)', '02');
-INSERT INTO public.refregion VALUES (3, '030000000', 'REGION III (CENTRAL LUZON)', '03');
-INSERT INTO public.refregion VALUES (4, '040000000', 'REGION IV-A (CALABARZON)', '04');
+INSERT INTO public.refregion VALUES (1, '010000000', 'REGION I (ILOCOS REGION)', '1');
+INSERT INTO public.refregion VALUES (2, '020000000', 'REGION II (CAGAYAN VALLEY)', '2');
+INSERT INTO public.refregion VALUES (3, '030000000', 'REGION III (CENTRAL LUZON)', '3');
+INSERT INTO public.refregion VALUES (4, '040000000', 'REGION IV-A (CALABARZON)', '4');
 INSERT INTO public.refregion VALUES (5, '170000000', 'REGION IV-B (MIMAROPA)', '17');
-INSERT INTO public.refregion VALUES (6, '050000000', 'REGION V (BICOL REGION)', '05');
-INSERT INTO public.refregion VALUES (7, '060000000', 'REGION VI (WESTERN VISAYAS)', '06');
-INSERT INTO public.refregion VALUES (8, '070000000', 'REGION VII (CENTRAL VISAYAS)', '07');
-INSERT INTO public.refregion VALUES (9, '080000000', 'REGION VIII (EASTERN VISAYAS)', '08');
-INSERT INTO public.refregion VALUES (10, '090000000', 'REGION IX (ZAMBOANGA PENINSULA)', '09');
+INSERT INTO public.refregion VALUES (6, '050000000', 'REGION V (BICOL REGION)', '5');
+INSERT INTO public.refregion VALUES (7, '060000000', 'REGION VI (WESTERN VISAYAS)', '6');
+INSERT INTO public.refregion VALUES (8, '070000000', 'REGION VII (CENTRAL VISAYAS)', '7');
+INSERT INTO public.refregion VALUES (9, '080000000', 'REGION VIII (EASTERN VISAYAS)', '8');
+INSERT INTO public.refregion VALUES (10, '090000000', 'REGION IX (ZAMBOANGA PENINSULA)', '9');
 INSERT INTO public.refregion VALUES (11, '100000000', 'REGION X (NORTHERN MINDANAO)', '10');
 INSERT INTO public.refregion VALUES (12, '110000000', 'REGION XI (DAVAO REGION)', '11');
 INSERT INTO public.refregion VALUES (13, '120000000', 'REGION XII (SOCCSKSARGEN)', '12');

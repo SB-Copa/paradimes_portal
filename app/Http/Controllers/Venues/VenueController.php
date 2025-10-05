@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Venue;
+namespace App\Http\Controllers\Venues;
 
 use App\Http\Controllers\Controller;
 use App\Models\Venues\VenuesModel;

@@ -23,8 +23,6 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
-DROP TABLE IF EXISTS refcitymun;
-
 --
 -- TOC entry 219 (class 1259 OID 22153)
 -- Name: refcitymun; Type: TABLE; Schema: public; Owner: postgres

@@ -16,10 +16,10 @@ class AddressSeeder extends Seeder
         //
 
         $path = [
-            'app/address_sql/refRegion.sql',
-            'app/address_sql/refProvince.sql',
-            'app/address_sql/refCitymun.sql',
-            'app/address_sql/refBrgy.sql',
+            'app/address_sql/refregion.sql',
+            'app/address_sql/refprovince.sql',
+            'app/address_sql/refcitymun.sql',
+            'app/address_sql/refbrgy.sql',
         ];
 
         foreach($path as $key => $value){

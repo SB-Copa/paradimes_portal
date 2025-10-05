@@ -6,7 +6,6 @@ use App\Models\SuffixModel;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,18 +21,18 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        DB::disconnect();
-        DB::reconnect();
 
-        // Call each seeder manually
-        $this->call(SuffixSeeder::class);
-        $this->call(SexSeeder::class);
-        $this->call(AddressSeeder::class);
-        $this->call(MarketingUserTypesSeeder::class);
-        $this->call(MarketingUsersSeeder::class);
-        $this->call(VenueStatusesSeeder::class);
-        $this->call(VenueTableStatusesSeeder::class);
-        $this->call(VenueTableRequirementTypesSeeder::class);
-        $this->call(EventTypesSeeder::class);
+
+        $this->call([
+            SuffixSeeder::class,
+            SexSeeder::class,
+            AddressSeeder::class,
+            MarketingUserTypesSeeder::class,
+            MarketingUsersSeeder::class,
+            VenueStatusesSeeder::class,
+            VenueTableStatusesSeeder::class,
+            VenueTableRequirementTypesSeeder::class,
+            EventTypesSeeder::class,
+        ]);
     }
 }
