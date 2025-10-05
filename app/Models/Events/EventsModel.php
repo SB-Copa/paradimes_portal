@@ -45,7 +45,7 @@ class EventsModel extends Model
     }
 
     public function venue(){
-        return $this->belongsTo(VenuesModel::class,'venue_id','id');
+        return $this->belongsToMany(VenuesModel::class,'venue_id','id');
     }
 
     public function eventType(){
