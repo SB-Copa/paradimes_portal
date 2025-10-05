@@ -44,12 +44,16 @@ class EventsModel extends Model
         });
     }
 
-    public function venue(){
+    public function venues(){
         return $this->belongsToMany(VenuesModel::class,'events_venues','event_id','venue_id');
     }
 
     public function eventType(){
         return $this->belongsTo(EventTypesModel::class,'event_type_id','id');
+    }
+
+    public function eventTicketTypes(){
+        return $this->hasMany(EventTicketTypesModel::class,'event_id','id');
     }
 
 }

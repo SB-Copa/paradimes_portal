@@ -4,9 +4,13 @@ namespace App\Models\Venues;
 
 use App\Models\Events\EventsModel;
 use App\Models\PersonalDetails\BarangayModel;
+use App\Models\PersonalDetails\BarangaysModel;
+use App\Models\PersonalDetails\CitiesMunicipalitiesModel;
 use App\Models\PersonalDetails\CityMunicipalityModel;
 use App\Models\PersonalDetails\ProvinceModel;
+use App\Models\PersonalDetails\ProvincesModel;
 use App\Models\PersonalDetails\RegionModel;
+use App\Models\PersonalDetails\RegionsModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -44,20 +48,20 @@ class VenuesModel extends Model
 
 
     public function region(){
-        return $this->belongsTo(RegionModel::class,'region_id','regCode');
+        return $this->belongsTo(RegionsModel::class,'region_id','regCode');
     }
 
     public function province(){
-        return $this->belongsTo(ProvinceModel::class,'province_id','provCode');
+        return $this->belongsTo(ProvincesModel::class,'province_id','provCode');
     }
 
     public function cityMunicipality(){
-        return $this->belongsTo(CityMunicipalityModel::class,'province_id','citymunCode');
+        return $this->belongsTo(CitiesMunicipalitiesModel::class,'province_id','citymunCode');
     }
 
     
     public function barangay(){
-        return $this->belongsTo(BarangayModel::class,'barangay_id','brgyCode');
+        return $this->belongsTo(BarangaysModel::class,'barangay_id','brgyCode');
     }
 
     public function venueTables(){

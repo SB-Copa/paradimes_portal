@@ -6,17 +6,55 @@ use Illuminate\Support\Facades\Route;
 
 // Route::post('/login',[App\Http\Controllers\Marketing\Auth\MarketingAuthController::class,'login']);
 
-
+/**
+ * 
+ * Venue
+ * 
+ */
 
 // Route::post('/add-venue',[App\Http\Controllers\Venue\VenueController::class,'store'])->middleware(['auth:marketing_users_session']);
-Route::post('/admin/add-event',[App\Http\Controllers\Marketings\Events\EventsController::class,'storeEvent']);
-Route::get('/admin/event-type',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventType']);
+
+
+/**
+ * 
+ * Event
+ * 
+ */
+
+Route::post('/admin/add-events',[App\Http\Controllers\Marketings\Events\EventsController::class,'storeEvent']);
+Route::get('/admin/event-types',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventTypes']);
+
+
+/**
+ * 
+ * 
+ * Event venues
+ * 
+ */
+
 Route::get('/admin/event/{eventID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEvents']);
-Route::get('/admin/event/{eventID}/venue/{venueID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenue']);
-Route::get('/admin/event/{eventID}/venue/{venueID}/tables',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenueTables']);
+Route::get('/admin/event/{eventID}/venues',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenues']);
+Route::get('/admin/event/{eventID}/venue/{venueID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventSpecificVenue']);
 
-
+/**
+ * 
+ * Event Tables
+ * 
+ */
+Route::get('/admin/event/{eventID}/venue/{venueID}/tables',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesTables']);
+Route::get('/admin/event/{eventID}/venue/{venueID}/tables/{tableID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesSpecificTables']);
 Route::get('/admin/venue/{venueID}/event/{eventID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showVenueEventsTables']);
+
+/**
+ * 
+ * 
+ * Event Tickets
+ * 
+ */
+
+Route::get('/admin/event/{eventID}/tickets',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventTicketTypes']);
+Route::get('/admin/event/{eventID}/tickets/{ticketTypeID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventSpecificTicketType']);
+
 
 
 /**
@@ -24,6 +62,8 @@ Route::get('/admin/venue/{venueID}/event/{eventID}',[App\Http\Controllers\Market
  * Personal Attributes
  * 
  */
+
+
 Route::get('/admin/personal-attributes',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'index']);
 Route::get('/admin/sex',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'sex']);
 Route::get('/admin/suffix',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'suffix']);

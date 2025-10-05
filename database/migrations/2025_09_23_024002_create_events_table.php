@@ -25,12 +25,11 @@ return new class extends Migration
             $table->json('carousel_images')->nullable();
 
 
-            $table->unsignedBigInteger('venue_id');
             $table->unsignedBigInteger('event_type_id');
 
 
         
-            $table->foreign('venue_id')->references('id')->on('venues')->onDelete('cascade');
+        
             $table->foreign('event_type_id')->references('id')->on('event_types');
             $table->timestamps();
         });
