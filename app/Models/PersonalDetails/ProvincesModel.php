@@ -12,7 +12,7 @@ class ProvincesModel extends Model
 
         protected $table = 'refprovince';
 
-        public function cityMunicipalities(){
-            return $this->hasMany(CityMunicipalitiesModel::class,'provCode','provCode');
+        public function citiesMunicipalities(){
+            return $this->hasMany(CitiesMunicipalitiesModel::class,'provCode','provCode');
         }
 }

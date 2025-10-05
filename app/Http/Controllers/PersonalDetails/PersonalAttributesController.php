@@ -48,29 +48,40 @@ class PersonalAttributesController extends Controller
             return response()->json($regions_provinces);
     }
 
-    public function regionsProvincesCityMunicipalities(string $regCode, string $provCode){
-         $regions_provinces_cities_municipalities = RegionsModel::with([
-                'provinces.citiesMunicipalities'
-             ])
-              ->whereHas('provinces.citiesMunicipalities', function($query) use ($regCode,$provCode){
-                $query->where('refcitymun.regCode','=',$regCode)
-                ->where('refcitymun.provCode','=',$provCode);
-             })
-             ->get();
+   public function regionsProvincesCitiesMunicipalities(string $regCode, string $provCode)
+    {
+        
+        $regions_provinces_cities_municipalities = RegionsModel::with(['provinces' => function($query) use ($regCode, $provCode) {
+            $query->where('regCode', $regCode)
+                ->where('provCode', $provCode)
+                ->with('citiesMunicipalities');
+        }])
+        ->whereHas('provinces', function($query) use ($regCode, $provCode) {
+            $query->where('regCode', $regCode)
+                ->where('provCode', $provCode);
+        })
+        ->get();
 
-            return response()->json($regions_provinces_cities_municipalities);
+        return response()->json($regions_provinces_cities_municipalities);
     }
 
-    public function regionsProvincesCityMunicipalitiesBarangays(string $regCode, string $provCode, string $cityMunCode){
-         $regions_provinces_cities_municipalities_barangays = RegionsModel::with([
-                'provinces.citiesMunicipalities'
-             ])
-              ->whereHas('provinces.citiesMunicipalities.barangays', function($query) use ($regCode,$provCode,$cityMunCode){
-                $query->where('refbrgy.regCode','=',$regCode)
-                ->where('refbrgy.provCode','=',$provCode)
-                ->where('refbrgy.citymunCode','=',$cityMunCode);
-             })
-             ->get();
+
+    public function regionsProvincesCitiesMunicipalitiesBarangays(string $regCode, string $provCode, string $cityMunCode){
+         $regions_provinces_cities_municipalities_barangays = RegionsModel::with(['provinces' => function($query) use ($regCode, $provCode, $cityMunCode) {
+                $query->where('regCode', $regCode)
+                    ->where('provCode', $provCode)
+                    ->with(['citiesMunicipalities' => function($query) use ($regCode, $provCode, $cityMunCode){
+                        $query->where('regCode',$regCode)->where('provCode',$provCode)->where('citymunCode',$cityMunCode)
+                        ->with('barangays');
+                    }]);
+            }])
+            ->whereHas('provinces.citiesMunicipalities.barangays', function($query) use ($regCode, $provCode, $cityMunCode) {
+                $query->where('regCode', $regCode)
+                    ->where('provCode', $provCode)
+                    ->where('citymunCode', $cityMunCode);
+            })
+            ->get();
+
 
 
             return response()->json($regions_provinces_cities_municipalities_barangays);

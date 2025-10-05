@@ -29,8 +29,8 @@ Route::get('/admin/sex',[App\Http\Controllers\PersonalDetails\PersonalAttributes
 Route::get('/admin/suffix',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'suffix']);
 Route::get('/admin/regions',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'regions']);
 Route::get('/admin/regions/{regCode}/provinces',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'regionsProvinces']);
-Route::get('/admin/regions/{regCode}/provinces/{provCode}/city-municipalities',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'regionsProvincesCityMunicipalities']);
-Route::get('/admin/regions/{regCode}/provinces/{provCode}/city-municipalities/{citymunCode}',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'regionsProvincesCityMunicipalitiesBarangays']);
+Route::get('/admin/regions/{regCode}/provinces/{provCode}/cities-municipalities',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'regionsProvincesCitiesMunicipalities']);
+Route::get('/admin/regions/{regCode}/provinces/{provCode}/cities-municipalities/{citymunCode}/barangays',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'regionsProvincesCitiesMunicipalitiesBarangays']);
 
 
 
