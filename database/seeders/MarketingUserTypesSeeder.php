@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Marketings\MarketingUserTypes;
+use App\Models\Marketings\MarketingUserTypesModel;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,8 +15,8 @@ class MarketingUserTypesSeeder extends Seeder
     {
         //
 
-        MarketingUserTypes::firstOrCreate([
-            'user_type' => 'CEO'
+        MarketingUserTypesModel::firstOrCreate([
+            'user_type' => "CEO"
         ]);
     }
 }
