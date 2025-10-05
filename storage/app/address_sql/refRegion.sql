@@ -23,6 +23,8 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
+DROP TABLE IF EXISTS refregion;
+
 --
 -- TOC entry 217 (class 1259 OID 22147)
 -- Name: refregion; Type: TABLE; Schema: public; Owner: postgres

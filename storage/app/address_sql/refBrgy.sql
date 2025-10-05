@@ -23,6 +23,8 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
+DROP TABLE IF EXISTS refbrgy;
+
 --
 -- TOC entry 220 (class 1259 OID 22156)
 -- Name: refbrgy; Type: TABLE; Schema: public; Owner: postgres

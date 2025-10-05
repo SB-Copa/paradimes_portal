@@ -23,6 +23,8 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
+DROP TABLE IF EXISTS refprovince;
+
 --
 -- TOC entry 218 (class 1259 OID 22150)
 -- Name: refprovince; Type: TABLE; Schema: public; Owner: postgres
