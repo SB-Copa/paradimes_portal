@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        sleep(3);
+
         $this->call([
             SuffixSeeder::class,
             SexSeeder::class,
