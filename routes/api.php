@@ -32,18 +32,19 @@ Route::get('/admin/event-types',[App\Http\Controllers\Marketings\Events\EventsCo
  * 
  */
 
-Route::get('/admin/event/{eventID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEvents']);
-Route::get('/admin/event/{eventID}/venues',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenues']);
-Route::get('/admin/event/{eventID}/venue/{venueID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventSpecificVenue']);
+Route::get('/admin/events',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEvents']);
+Route::get('/admin/events/{eventID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showSpecificEvent']);
+Route::get('/admin/events/{eventID}/venues',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenues']);
+Route::get('/admin/events/{eventID}/venues/{venueID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventSpecificVenue']);
 
 /**
  * 
  * Event Tables
  * 
  */
-Route::get('/admin/event/{eventID}/venue/{venueID}/tables',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesTables']);
-Route::get('/admin/event/{eventID}/venue/{venueID}/tables/{tableID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesSpecificTables']);
-Route::get('/admin/venue/{venueID}/event/{eventID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showVenueEventsTables']);
+Route::get('/admin/events/{eventID}/venues/{venueID}/tables',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesTables']);
+Route::get('/admin/events/{eventID}/venues/{venueID}/tables/{tableID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesSpecificTables']);
+
 
 /**
  * 
@@ -52,8 +53,8 @@ Route::get('/admin/venue/{venueID}/event/{eventID}',[App\Http\Controllers\Market
  * 
  */
 
-Route::get('/admin/event/{eventID}/tickets',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventTicketTypes']);
-Route::get('/admin/event/{eventID}/tickets/{ticketTypeID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventSpecificTicketType']);
+Route::get('/admin/events/{eventID}/tickets',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventTicketTypes']);
+Route::get('/admin/events/{eventID}/tickets/{ticketTypeID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventSpecificTicketType']);
 
 
 

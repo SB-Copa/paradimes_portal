@@ -391,11 +391,19 @@ class EventsController extends Controller
         return response()->json($event_types, 201);
     }
 
+    public function showEvents()
+    {
+        $events = EventsModel::orderBy('name')->cursorPaginate(20);
+
+
+        return response()->json($events);
+    }
+
 
      /**
      * Display the specified resource.
      */
-    public function showEvents(string $id)
+    public function showSpecificEvent(string $id)
     {
         //
 
@@ -410,7 +418,7 @@ class EventsController extends Controller
             'eventType'
         ])
         ->where('events.id', '=', $id)
-        ->get();
+        ->first();
 
 
         return response()->json($events, 201);
@@ -431,7 +439,7 @@ class EventsController extends Controller
             // 'eventType'
         ])
         ->where('events.id', '=', $eventID)
-        ->get();
+        ->first();
 
 
         return response()->json($events, 201);
@@ -461,7 +469,7 @@ class EventsController extends Controller
             $query->where('venues.id','=',$venueID);
         })
         ->where('events.id', '=', $eventID)
-        ->get();
+        ->first();
 
 
         return response()->json($events, 201);
@@ -499,7 +507,7 @@ class EventsController extends Controller
             $query->where('events_venues.venue_id','=',$venueID);
         })
         ->where('events.id', '=', $eventID)
-        ->get();
+        ->first();
 
 
         return response()->json($events, 201);
@@ -541,7 +549,7 @@ class EventsController extends Controller
             $query->where('events_venues.venue_id','=',$venueID);
         })
         ->where('events.id', '=', $eventID)
-        ->get();
+        ->first();
 
 
         return response()->json($events, 201);
