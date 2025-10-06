@@ -22,7 +22,9 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::post('/admin/add-events',[App\Http\Controllers\Marketings\Events\EventsController::class,'storeEvent']);
+
 Route::get('/admin/event-types',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventTypes']);
+Route::get('/admin/event-types/{eventTypeID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showSpecificEventType']);
 
 
 /**

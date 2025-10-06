@@ -400,6 +400,18 @@ class EventsController extends Controller
         return response()->json($event_types, 201);
     }
 
+    public function showSpecificEventType(string $eventTypeID)
+    {
+        $event_types = EventTypesModel::find($eventTypeID);
+
+        return response()->json($event_types);
+    }
+
+    public function updateEventType()
+    {
+        
+    }
+
     public function showEvents()
     {
         $events = EventsModel::orderBy('name')->cursorPaginate(20);
