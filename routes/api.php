@@ -43,7 +43,8 @@ Route::get('/admin/events/{eventID}/venues/{venueID}',[App\Http\Controllers\Mark
  * 
  */
 Route::get('/admin/events/{eventID}/venues/{venueID}/tables',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesTables']);
-Route::get('/admin/events/{eventID}/venues/{venueID}/tables/{tableID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesSpecificTables']);
+Route::get('/admin/events/{eventID}/venues/{venueID}/table-names',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesTableNames']);
+Route::get('/admin/events/{eventID}/venues/{venueID}/table-names/{tableNameID}/tables/{tableID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesTableNamesSpecificTables']);
 
 
 /**
