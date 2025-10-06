@@ -416,6 +416,7 @@ class EventsController extends Controller
     {
         //
 
+        
 
         $events = EventsModel::with([
             // 'venue.venueStatus',
