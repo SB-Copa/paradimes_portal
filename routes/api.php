@@ -25,7 +25,7 @@ Route::post('/admin/add-events',[App\Http\Controllers\Marketings\Events\EventsCo
 
 Route::get('/admin/event-types',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventTypes']);
 Route::get('/admin/event-types/{eventTypeID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showSpecificEventType']);
-
+Route::patch('/admin/event-types/{eventTypeID}/update',[App\Http\Controllers\Marketings\Events\EventsController::class,'updateEventType']);
 
 /**
  * 

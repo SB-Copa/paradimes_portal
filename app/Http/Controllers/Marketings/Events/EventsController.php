@@ -407,9 +407,26 @@ class EventsController extends Controller
         return response()->json($event_types);
     }
 
-    public function updateEventType()
+    public function updateEventType(Request $request, string $eventTypeID)
     {
+        try{
+        DB::beginTransaction();
+
         
+        $event_types = EventTypesModel::find($eventTypeID);
+        $event_types->type = $request->input('type');
+        $event_types->save();    
+
+        return response()->json('Event type updated successfully', 201);
+
+        DB::commit();
+        }catch(Exception $e){
+             // Rollback on error
+            DB::rollBack();
+            // Handle the exception
+            throw $e;
+        }
+
     }
 
     public function showEvents()
