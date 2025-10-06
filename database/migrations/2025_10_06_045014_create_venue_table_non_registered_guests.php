@@ -11,27 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('non_registered_users', function (Blueprint $table) {
+        Schema::create('venue_table_non_registered_guests', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->unsignedBigInteger('suffix_id')->nullable();
-            $table->unsignedBigInteger('sex_id');
-            $table->string('address')->nullable();
-            $table->string('region_id');
-            $table->string('province_id');
-            $table->string('municipality_id');
-            $table->string('barangay_id');
-            $table->string('contact_number');
             $table->date('birthdate');
-            $table->string('email')->unique();
+            $table->unsignedBigInteger('sex_id')->nullable();
+            $table->unsignedBigInteger('venue_table_reservation_id');
 
-
+            
+            $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
             $table->foreign('suffix_id')->references('id')->on('suffix');
             $table->foreign('sex_id')->references('id')->on('sex');
-
-
             $table->timestamps();
         });
     }
@@ -41,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('non_registered_users');
+        Schema::dropIfExists('venue_table_non_registered_guests');
     }
 };

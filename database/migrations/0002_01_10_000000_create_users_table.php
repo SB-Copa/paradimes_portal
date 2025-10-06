@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
-            $table->unsignedBigInteger('suffix_id');
+            $table->unsignedBigInteger('suffix_id')->nullable();
             $table->unsignedBigInteger('sex_id');
             $table->string('address')->nullable();
             $table->string('region_id');

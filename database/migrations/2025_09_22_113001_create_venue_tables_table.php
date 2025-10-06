@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('venue_id');
             $table->unsignedBigInteger('venue_table_status_id');
+            $table->unsignedBigInteger('venue_table_name_id');
             $table->integer('capacity');
-            $table->string('name');
-            $table->morphs('user');
-
+            $table->string('legend');
+ 
+            $table->foreign('venue_table_name_id')->references('id')->on('venue_table_names');
             $table->foreign('venue_table_status_id')->references('id')->on('venue_table_statuses');
             $table->foreign('venue_id')->references('id')->on('venues');
             $table->timestamps();

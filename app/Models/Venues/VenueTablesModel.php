@@ -17,8 +17,9 @@ class VenueTablesModel extends Model
         'user_type',
         'user_id',
         'venue_table_status_id',
+        'venue_table_name_id',
         'capacity',
-        'name',
+        'legend'
     ];
 
     public function tableStatus(){

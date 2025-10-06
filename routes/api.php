@@ -74,5 +74,9 @@ Route::get('/admin/regions/{regCode}/provinces/{provCode}/cities-municipalities'
 Route::get('/admin/regions/{regCode}/provinces/{provCode}/cities-municipalities/{citymunCode}/barangays',[App\Http\Controllers\PersonalDetails\PersonalAttributesController::class,'regionsProvincesCitiesMunicipalitiesBarangays']);
 
 
-
+/**
+ * 
+ * Client
+ * 
+ */
 

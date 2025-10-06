@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_registered_guests', function (Blueprint $table) {
+        Schema::create('venue_table_registered_guests', function (Blueprint $table) {
             $table->id();
-            $table->uuid('event_registered_guest_unique_id');
-            $table->unsignedBigInteger('event_reservation_ticket_id');
+            $table->unsignedBigInteger('venue_table_reservation_id');
             $table->unsignedBigInteger('user_id');
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('event_reservation_ticket_id')->references('id')->on('event_reservation_tickets');
-            $table->timestamps();
+            $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('event_registered_guests');
+        Schema::dropIfExists('venue_table_registered_guests');
     }
 };

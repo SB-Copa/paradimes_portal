@@ -17,6 +17,7 @@ class EventTicketTypesModel extends Model
         'name',
         'description',
         'price',
+        'available_tickets'
     ];
 
     protected $casts = [

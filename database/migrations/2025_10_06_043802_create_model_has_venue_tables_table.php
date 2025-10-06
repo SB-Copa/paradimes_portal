@@ -11,18 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('venue_table_requirements', function (Blueprint $table) {
+        Schema::create('model_has_venue_tables', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('legend');
-            $table->text('description');
-            $table->unsignedBigInteger('venue_table_requirement_type_id');
+            $table->morphs('model');
             $table->unsignedBigInteger('venue_table_id');
-            $table->integer('quantity');
-            $table->decimal('price');
 
             $table->foreign('venue_table_id')->references('id')->on('venue_tables');
-            $table->foreign('venue_table_requirement_type_id')->references('id')->on('venue_table_requirement_types');
             $table->timestamps();
         });
     }
@@ -32,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('venue_table_requirements');
+        Schema::dropIfExists('model_has_venue_tables');
     }
 };

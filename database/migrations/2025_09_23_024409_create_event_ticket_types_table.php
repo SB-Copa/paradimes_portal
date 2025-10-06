@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('description');
             $table->decimal('price');
+            $table->unsignedBigInteger('available_tickets');
 
             $table->foreign('event_id')->references('id')->on('events');
 

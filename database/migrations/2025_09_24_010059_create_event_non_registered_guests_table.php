@@ -31,6 +31,7 @@ return new class extends Migration
 
             $table->foreign('suffix_id')->references('id')->on('suffix');
             $table->foreign('sex_id')->references('id')->on('sex');
+            $table->foreign('event_reservation_ticket_id')->references('id')->on('event_reservation_tickets');
             $table->timestamps();
         });
     }
