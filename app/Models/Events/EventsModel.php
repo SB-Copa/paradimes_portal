@@ -26,7 +26,6 @@ class EventsModel extends Model
         'menu_images',
         'banner_images',
         'carousel_images',
-        'venue_id',
         'event_type_id',
         'event_ticket_type_id',
     ];

@@ -15,15 +15,10 @@ return new class extends Migration
             $table->id();
             $table->uuid('event_reservation_unique_id');
             $table->unsignedBigInteger('event_id');
-            $table->morphs('user_model');
-            
-  
             $table->unsignedBigInteger('venue_table_reservation_id');
-            // $table->unsignedBigInteger('promotion_id');
             $table->unsignedBigInteger('payment_intent_id');
-            $table->morphs('host_model');
 
-        
+
             $table->foreign('event_id')->references('id')->on('events');
             $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
             // $table->foreign('promotion_id')->references('id')->on('promotions');

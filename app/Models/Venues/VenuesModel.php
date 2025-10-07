@@ -72,8 +72,9 @@ class VenuesModel extends Model
         return $this->belongsTo(VenueStatusesModel::class,'venue_status_id','id');
     }
 
+    
     public function events(){
-        return $this->hasMany(EventsModel::class,'venue_id','id');
+        return $this->belongsToMany(EventsModel::class,'events_venues','venue_id','event_id');
     }
 
     

@@ -22,6 +22,10 @@ class VenueTablesModel extends Model
         'legend'
     ];
 
+    public function venue(){
+        return $this->belongsTo(VenuesModel::class,'venue_id','id');
+    }
+
     public function tableStatus(){
         return $this->belongsTo(VenueTableStatusesModel::class,'venue_table_status_id','id');
     }

@@ -15,4 +15,8 @@ class VenueTableNamesModel extends Model
         'name',
         'venue_id',
     ];
+
+    public function venueTables(){
+        return $this->hasMany(VenueTablesModel::class,'venue_table_name_id','id');
+    }
 }

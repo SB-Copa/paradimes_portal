@@ -19,11 +19,11 @@ return new class extends Migration
             $table->unsignedBigInteger('suffix_id')->nullable();
             $table->unsignedBigInteger('sex_id');
             $table->string('address')->nullable();
-            $table->string('region_id');
-            $table->string('province_id');
-            $table->string('municipality_id');
-            $table->string('barangay_id');
-            $table->string('contact_number');
+            $table->string('region_id')->nullable();
+            $table->string('province_id')->nullable();
+            $table->string('municipality_id')->nullable();
+            $table->string('barangay_id')->nullable();
+            $table->string('contact_number')->nullable();
             $table->date('birthdate');
             $table->string('email')->unique();
 

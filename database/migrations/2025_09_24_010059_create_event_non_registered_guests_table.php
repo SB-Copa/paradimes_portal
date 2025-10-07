@@ -20,12 +20,12 @@ return new class extends Migration
             $table->string('last_name');
             $table->unsignedBigInteger('suffix_id')->nullable();
             $table->unsignedBigInteger('sex_id');
-            $table->string('address')->nullable()->unique();
-            $table->string('region_id');
-            $table->string('province_id');
-            $table->string('municipality_id');
-            $table->string('barangay_id');
-            $table->string('email')->nullable();
+            $table->string('address')->nullable();
+            $table->string('region_id')->nullable();
+            $table->string('province_id')->nullable();
+            $table->string('municipality_id')->nullable();
+            $table->string('barangay_id')->nullable();
+            $table->string('email');
             $table->string('contact_number');
             $table->date('birthdate');
 

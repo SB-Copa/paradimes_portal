@@ -5,7 +5,7 @@ namespace App\Models\Users;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NonRegisteredUsers extends Model
+class NonRegisteredUsersModel extends Model
 {
     //
     use HasFactory;
