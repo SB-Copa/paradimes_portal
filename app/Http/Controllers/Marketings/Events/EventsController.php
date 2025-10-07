@@ -400,6 +400,35 @@ class EventsController extends Controller
         return response()->json($event_types, 201);
     }
 
+    public function showSpecificEventType(string $eventTypeID)
+    {
+        $event_types = EventTypesModel::find($eventTypeID);
+
+        return response()->json($event_types);
+    }
+
+    public function updateEventType(Request $request, string $eventTypeID)
+    {
+        try{
+        DB::beginTransaction();
+
+        
+        $event_types = EventTypesModel::find($eventTypeID);
+        $event_types->type = $request->input('type');
+        $event_types->save();    
+
+        return response()->json('Event type updated successfully', 201);
+
+        DB::commit();
+        }catch(Exception $e){
+             // Rollback on error
+            DB::rollBack();
+            // Handle the exception
+            throw $e;
+        }
+
+    }
+
     public function showEvents()
     {
         $events = EventsModel::orderBy('name')->cursorPaginate(20);
@@ -416,6 +445,7 @@ class EventsController extends Controller
     {
         //
 
+        
 
         $events = EventsModel::with([
             // 'venue.venueStatus',
@@ -509,7 +539,7 @@ class EventsController extends Controller
             'venues.province',
             'venues.cityMunicipality',
             'venues.barangay',
-            'venues.venueTables.tableStatus',
+            'venues.venueTableNames.venuesTables',
             'eventType'
         ])
         ->whereHas('venues',function($query) use ($venueID){
@@ -527,38 +557,76 @@ class EventsController extends Controller
 
     }
 
-
-
-    public function showEventVenuesSpecificTables(string $venueID, string $eventID, string $tableID)
+    public function showEventVenuesTableNames(string $eventID, string $venueID,)
     {
 
         try{
             
       
         $events = EventsModel::with([
-            'venues' => function($query) use ($venueID,$tableID){
-                $query->where('events_venues.venue_id','=',$venueID)
-                ->with([
-                    'venueTables' => function($query) use ($tableID){
-                        $query->where('venue_tables.id','=',$tableID)
-                        ->with([
-                            'tableStatus'
-                        ]);
-                    },
-                    'venueStatus',
-                    'region',
-                    'province',
-                    'cityMunicipality',
-                    'barangay',
-                ]);
+            'venues' => function($query) use ($venueID) {
+                $query->where('events_venues.venue_id', '=', $venueID)
+                    ->with([
+                        'venueTableNames',
+                        'venueStatus',
+                        'region',
+                        'province',
+                        'cityMunicipality',
+                        'barangay',
+                    ]);
             },
             'eventType'
         ])
-        ->whereHas('venues',function($query) use ($venueID){
-            $query->where('events_venues.venue_id','=',$venueID);
+        ->whereHas('venues', function($query) use ($venueID) {
+            $query->where('events_venues.venue_id', '=', $venueID);
         })
         ->where('events.id', '=', $eventID)
         ->first();
+
+
+
+        return response()->json($events, 201);
+
+        }catch(Exception $e){
+            throw $e;
+        }
+
+    }
+
+    public function showEventVenuesTableNamesSpecificTables(string $eventID, string $venueID, string $tableNameID ,string $tableID)
+    {
+
+        try{
+            
+      
+        $events = EventsModel::with([
+            'venues' => function($query) use ($venueID, $tableID, $tableNameID) {
+                $query->where('events_venues.venue_id', '=', $venueID)
+                    ->with([
+                        'venueTableNames' => function($query) use ($tableNameID, $tableID) {
+                            $query->where('venue_table_names.id', '=', $tableNameID)
+                                ->with([
+                                    'venuesTables' => function($query) use ($tableID) {
+                                        $query->where('venue_tables.id', '=', $tableID)
+                                            ->with(['tableStatus']);
+                                    }
+                                ]);
+                        },
+                        'venueStatus',
+                        'region',
+                        'province',
+                        'cityMunicipality',
+                        'barangay',
+                    ]);
+            },
+            'eventType'
+        ])
+        ->whereHas('venues', function($query) use ($venueID) {
+            $query->where('events_venues.venue_id', '=', $venueID);
+        })
+        ->where('events.id', '=', $eventID)
+        ->first();
+
 
 
         return response()->json($events, 201);
