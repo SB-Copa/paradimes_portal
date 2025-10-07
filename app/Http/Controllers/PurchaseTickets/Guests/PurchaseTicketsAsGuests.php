@@ -185,11 +185,19 @@ class PurchaseTicketsAsGuests extends Controller
                 'birthdate' => 'required|date',
                 'email' => 'required|email',
                 'total_amount' => [
-                'required',
-                'decimal:0,2',
-                function($attribute, $value, $fail) use ($request){
-                    
-                }
+                    'required',
+                    'decimal:0,2',
+                    function($attribute, $value, $fail) use ($request){
+                        dd(
+                          collect($request->input('event.venue_table_reservations'))
+                            ->map(function ($reservation) {
+                                $venueTableID = $reservation['venue_table_id'];
+                                $venueID = $reservation['venue_id'];
+                                $venueTableName = $reservation['venu_table_name_id'];
+                                return $venueTableID = $reservation['venue_table_id'];
+                            })
+                        );
+                    }
                 ]
             ]);
 
