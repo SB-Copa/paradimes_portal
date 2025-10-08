@@ -4,11 +4,18 @@ namespace App\Http\Controllers\PurchaseTickets\Guests;
 
 use App\Http\Controllers\Controller;
 use App\Models\Events\EventNonRegisteredGuestsModel;
+use App\Models\Events\EventReservationsModel;
 use App\Models\Events\EventTicketTypesModel;
+use App\Models\User;
 use App\Models\Users\NonRegisteredUsersModel;
+use App\Models\Venues\ModelHasVenueTableReservations;
 use App\Models\Venues\VenuesModel;
 use App\Models\Venues\VenueTableNamesModel;
+use App\Models\Venues\VenueTableNonRegisteredGuestsModel;
+use App\Models\Venues\VenueTableRegisteredGuestsModel;
+use App\Models\Venues\VenueTableReservationsModel;
 use App\Models\Venues\VenueTablesModel;
+use Database\Factories\Models\Venues\VenueTableNonRegisteredGuestsModelFactory;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -128,8 +135,8 @@ class PurchaseTicketsAsGuests extends Controller
                             $venueTableID =  $request->input("event.venue_table_reservations.{$index}.venue_table_id");
 
                             $venueTable = VenueTablesModel::find($venueTableID);
-
-                            $totalCapacity = $venueTable->capacity * $quantity;
+                  
+                            $totalCapacity = $venueTable['capacity'] * $quantity;
 
                             if((count($value) > $totalCapacity) || ($totalCapacity <= 0 && count($value)) > 0){
                                 $fail('The guests must not be greater than the quantity.');
@@ -184,21 +191,6 @@ class PurchaseTicketsAsGuests extends Controller
                 'contact_number' => 'nullable|regex:/^(09|\+639)\d{9}$/',
                 'birthdate' => 'required|date',
                 'email' => 'required|email',
-                'total_amount' => [
-                    'required',
-                    'decimal:0,2',
-                    function($attribute, $value, $fail) use ($request){
-                        dd(
-                          collect($request->input('event.venue_table_reservations'))
-                            ->map(function ($reservation) {
-                                $venueTableID = $reservation['venue_table_id'];
-                                $venueID = $reservation['venue_id'];
-                                $venueTableName = $reservation['venu_table_name_id'];
-                                return $venueTableID = $reservation['venue_table_id'];
-                            })
-                        );
-                    }
-                ]
             ]);
 
 
@@ -211,19 +203,182 @@ class PurchaseTicketsAsGuests extends Controller
                 ], 422);
             }
 
-
             $guest_data = $guest_ticket_validator->validated();
-            dd($guest_data);
+
+            /**
+             * 
+             * Add to database
+             * 
+             */
+            try{
+                
+            DB::beginTransaction();
 
 
-            NonRegisteredUsersModel::firstOrCreate(
-                [
+            /**
+             * 
+             * 
+             * For table reservation
+             * 
+             * 
+             */
 
-                ],
-                [
+            if(isset($guest_data['event']['venue_table_reservations'])){
 
-                ]
-            );
+                foreach($guest_data['event']['venue_table_reservations'] as $venue_table_reservations_key => $venue_table_reservations_value){
+          
+                    $venueTableReservations = VenueTableReservationsModel::
+                    join('venue_tables','venue_table_reservations.venue_id','=','venue_tables.id')
+                    ->lockForUpdate()
+                    ->first();
+
+                    /**
+                     * 
+                     * 
+                     * Add payment gateway here
+                     * 
+                     */
+
+                    if($venueTableReservations){
+                        throw new \Exception('Venue table is already reserved');
+                    }else{
+           
+                        $venueTableReservations = VenueTableReservationsModel::firstOrCreate(
+                            [
+                                'venue_table_id' => $venue_table_reservations_value['venue_table_id'],
+                                'venue_id' => $venue_table_reservations_value['venue_id'],
+                            ],
+                            [
+                                'venue_table_id' => $venue_table_reservations_value['venue_table_id'],
+                                'venue_id' => $venue_table_reservations_value['venue_id'],
+                                'venue_table_holder_type_id' => $venue_table_reservations_value['venue_table_holder_type_id'],
+                                'description' =>  $venue_table_reservations_value['description'] ?? null
+                            ]
+                        );
+
+                        foreach($venue_table_reservations_value['guests'] as $guests_key => $guests_value){
+
+                            $user = User::where('first_name','=',$guests_value['first_name'])
+                            ->where('middle_name','=',$guests_value['middle_name'])
+                            ->where('last_name','=',$guests_value['last_name'])
+                            ->where('suffix_id','=',$guests_value['suffix_id'])
+                            ->first();
+
+
+                            if($user || isset($user)){
+                                $venueTableRegisteredGuest = VenueTableRegisteredGuestsModel::create([
+                                    'user_id' => $user->id
+                                ]);
+                    
+                                ModelHasVenueTableReservations::create([
+                                    'model_type' => get_class($venueTableRegisteredGuest),
+                                    'model_id' => $venueTableRegisteredGuest->id,
+                                    'venue_table_reservation_id'
+                                ]);
+
+                            }else{
+
+                                $venueTableNonRegisteredGuest = VenueTableNonRegisteredGuestsModel::create([
+                                    'first_name' => $guests_value['first_name'],
+                                    'middle_name' => $guests_value['middle_name'] ?? null,
+                                    'last_name' => $guests_value['last_name'],
+                                    'suffix_id' => $guests_value['suffix_id'] ?? null,
+                                    'sex_id' => $guests_value['sex_id'] ?? null,
+                                    'birthdate' => $guests_value['birthdate']
+                                ]);
+                               
+                                ModelHasVenueTableReservations::create([
+                                    'model_type' => get_class($venueTableNonRegisteredGuest),
+                                    'model_id' => $venueTableNonRegisteredGuest->id,
+                                    'venue_table_reservation_id'
+                                ]);
+                            }
+                            
+                        }
+                        
+                    }
+
+                }
+
+            }   
+
+            dd(123);
+ 
+            /**
+             * 
+             * 
+             * For event tickets
+             * 
+             * 
+             */
+
+            if(isset($guest_data['event']['event_tickets'])){
+
+                foreach($guest_data['event']['event_tickets'] as $event_ticket_key => $event_ticket_value){
+
+                    $eventTicketType = EventTicketTypesModel::where('event_id','=',$event_ticket_value['event_id'])->where('id', $event_ticket_value['ticket_type_id'])->lockForUpdate()->get();
+         
+                    if(!$eventTicketType){
+                        DB::rollback();
+                        throw new \Exception('Ticket type not found');
+                    }
+
+                    if($eventTicketType->available_tickets < $event_ticket_value['quantity']){
+                        DB::rollback();
+                        throw new \Exception('Not enough tickets available');
+                    }
+
+                    /**
+                     * 
+                     * 
+                     * Add payment gateway here
+                     * 
+                     */
+
+                    if($eventTicketType->available_tickets > 0){
+                        // $eventTicketType->available_tickets -= $event_ticket_value['quantity'];
+                        // $eventTicketType->save();
+                        $eventTicketType->decrement('available_tickets', $event_ticket_value['quantity']);
+                    }
+
+                    
+                    
+                    //Guests
+                    if(isset($event_ticket_value['guests'])){
+
+                        //Guest
+                        foreach($event_ticket_value['guests'] as $guest){
+                            $nonRegisteredUser = NonRegisteredUsersModel::firstOrCreate(
+                                [
+                                    'first_name' => $guest['first_name'],
+                                    'middle_name' => $guest['middle_name'],
+                                    'last_name' => $guest['last_name'],
+                                    'suffix_id' => $guest['suffix_id'],
+                                    'birthdate' => $guest['birthdate']
+                                ],
+                                [
+                                    'first_name' => $guest['first_name'],
+                                    'middle_name' => $guest['middle_name'],
+                                    'last_name' => $guest['last_name'],
+                                    'suffix_id' => $guest['suffix_id'],
+                                    'birthdate' => $guest['birthdate'],
+                                    'email' => $guest['email']
+                                ]
+                            );
+                        }
+                    }
+                }
+            }
+            
+            dd(123);
+
+            DB::commit();
+
+            }catch(Exception $ex){
+                DB::rollback();
+                throw $ex;
+            }
+      
 
         }catch(Exception $ex){
             DB::rollback();

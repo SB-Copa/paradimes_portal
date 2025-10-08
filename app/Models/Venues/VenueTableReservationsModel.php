@@ -6,20 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class VenueTableReservationModel extends Model
+class VenueTableReservationsModel extends Model
 {
     /** @use HasFactory<\Database\Factories\App\Models\Venue\VenueTableReservationModelFactory> */
     use HasFactory;
 
-    protected $table = 'venue_table_reservation';
+    protected $table = 'venue_table_reservations';
 
      protected $fillable = [
         'venue_tables_reservation_unique_id',
         'venue_table_id',
         'venue_id',
-        'user_id',
-        'non_registered_user_id',
-        'table_holder_type_id',
+        'venue_table_holder_type_id',
     ];
 
     protected $casts = [

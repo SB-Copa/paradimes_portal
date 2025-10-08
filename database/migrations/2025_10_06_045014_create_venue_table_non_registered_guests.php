@@ -19,10 +19,10 @@ return new class extends Migration
             $table->unsignedBigInteger('suffix_id')->nullable();
             $table->date('birthdate');
             $table->unsignedBigInteger('sex_id')->nullable();
-            $table->unsignedBigInteger('venue_table_reservation_id');
+            // $table->unsignedBigInteger('venue_table_reservation_id');
 
             
-            $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
+            // $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
             $table->foreign('suffix_id')->references('id')->on('suffix');
             $table->foreign('sex_id')->references('id')->on('sex');
             $table->timestamps();
