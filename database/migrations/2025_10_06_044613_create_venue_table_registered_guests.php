@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('venue_table_reservation_id');
             $table->timestamps();
 
-            $table->foreign('venue_table_registered_id')->references('id')->on('venue_table_reservations');
+            $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
