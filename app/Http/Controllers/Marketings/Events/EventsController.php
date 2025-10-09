@@ -606,7 +606,7 @@ class EventsController extends Controller
                         'venueTableNames' => function($query) use ($tableNameID, $tableID) {
                             $query->where('venue_table_names.id', '=', $tableNameID)
                                 ->with([
-                                    'venuesTables' => function($query) use ($tableID) {
+                                    'venueTables' => function($query) use ($tableID) {
                                         $query->where('venue_tables.id', '=', $tableID)
                                             ->with(['tableStatus']);
                                     }
