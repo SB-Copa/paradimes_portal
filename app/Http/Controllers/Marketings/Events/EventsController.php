@@ -539,7 +539,7 @@ class EventsController extends Controller
             'venues.province',
             'venues.cityMunicipality',
             'venues.barangay',
-            'venues.venueTableNames.venuesTables',
+            'venues.venueTableNames.venueTables',
             'eventType'
         ])
         ->whereHas('venues',function($query) use ($venueID){
