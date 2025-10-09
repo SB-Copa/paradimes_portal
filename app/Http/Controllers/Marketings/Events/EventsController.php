@@ -638,13 +638,15 @@ class EventsController extends Controller
     }
 
 
-    public function showEventTicketTypes(){
+    public function showEventTicketTypes(string $eventID){
 
         try{
 
             $event_tickets = EventsModel::with([
                 'eventTicketTypes'
-            ])->get();
+            ])
+            ->where('events.id','=',$eventID)
+            ->first();
 
             return response()->json($event_tickets);
         }catch(Exception $e){
@@ -662,7 +664,7 @@ class EventsController extends Controller
                 }
             ])
             ->where('events.id','=',$eventID)
-            ->get();
+            ->first();
 
             return response()->json($event_ticket_type);
         }catch(Exception $e){
