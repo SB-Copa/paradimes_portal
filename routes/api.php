@@ -36,17 +36,17 @@ Route::patch('/admin/event-types/{eventTypeID}/update',[App\Http\Controllers\Mar
 
 Route::get('/admin/events',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEvents']);
 Route::get('/admin/events/{eventID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showSpecificEvent']);
-Route::get('/admin/events/{eventID}/venues',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenues']);
-Route::get('/admin/events/{eventID}/venues/{venueID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventSpecificVenue']);
+Route::get('/admin/events/{eventID}/venues',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenues']);
+Route::get('/admin/events/{eventID}/venues/{venueID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventSpecificVenue']);
 
 /**
  * 
  * Event Tables
  * 
  */
-Route::get('/admin/events/{eventID}/venues/{venueID}/tables',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesTables']);
-Route::get('/admin/events/{eventID}/venues/{venueID}/table-names',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesTableNames']);
-Route::get('/admin/events/{eventID}/venues/{venueID}/table-names/{tableNameID}/tables/{tableID}',[App\Http\Controllers\Marketings\Events\Eventscontroller::class,'showEventVenuesTableNamesSpecificTables']);
+Route::get('/admin/events/{eventID}/venues/{venueID}/tables',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenuesTables']);
+Route::get('/admin/events/{eventID}/venues/{venueID}/table-names',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenuesTableNames']);
+Route::get('/admin/events/{eventID}/venues/{venueID}/table-names/{tableNameID}/tables/{tableID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenuesTableNamesSpecificTables']);
 
 
 /**

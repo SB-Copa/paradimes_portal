@@ -286,6 +286,15 @@ class PurchaseTicketsAsGuests extends Controller
                                 );
 
                                 //put non registered users here
+                                NonRegisteredUsersModel::firstOrCreate(
+                                    [
+
+                                    ],
+                                    [
+                                        
+                                    ]
+                                );
+
                                 ModelHasVenueTableReservations::create([
                                     'model_type' => get_class($venueTableNonRegisteredGuest),
                                     'model_id' => $venueTableNonRegisteredGuest->id,
