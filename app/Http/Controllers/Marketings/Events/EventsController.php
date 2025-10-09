@@ -652,6 +652,7 @@ class EventsController extends Controller
         }catch(Exception $e){
             throw $e;
         }
+        
     }
 
     public function showEventSpecificTicketType(string $eventID,string $ticketTypeID){
