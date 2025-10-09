@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('model_has_user_event_reservations', function (Blueprint $table) {
+        Schema::create('model_has_event_reservations', function (Blueprint $table) {
             $table->id();
             $table->morphs('model');
             $table->unsignedBigInteger('event_reservation_id');

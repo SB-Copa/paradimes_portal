@@ -13,6 +13,7 @@ class VenueTableRegisteredGuestsModel extends Model
     protected $table = 'venue_table_registered_guests';
 
     protected $fillable = [
-        'user_id'
+        'user_id',
+        'venue_table_reservation_id',
     ];
 }

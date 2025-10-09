@@ -19,6 +19,7 @@ class VenueTableNonRegisteredGuestsModel extends Model
         'last_name',
         'suffix_id',
         'birthdate',
-        'sex_id'
+        'sex_id',
+        'venue_table_reservation_id'
     ];
 }

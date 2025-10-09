@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('model_has_venue_table_reservations', function (Blueprint $table) {
             $table->id();
-            $table->morphs('moodel');
+            $table->morphs('model');
             $table->unsignedBigInteger('venue_table_reservation_id');
 
             $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');

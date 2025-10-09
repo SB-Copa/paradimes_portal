@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('event_non_registered_guests', function (Blueprint $table) {
             $table->id();
             $table->uuid('event_non_registered_guest_unique_key');
-            $table->unsignedBigInteger('event_reservation_ticket_id');
+            // $table->unsignedBigInteger('event_reservation_ticket_id');
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->unsignedBigInteger('suffix_id')->nullable();
-            $table->unsignedBigInteger('sex_id');
+            $table->unsignedBigInteger('sex_id')->nullable();
             $table->string('address')->nullable();
             $table->string('region_id')->nullable();
             $table->string('province_id')->nullable();
@@ -31,7 +31,7 @@ return new class extends Migration
 
             $table->foreign('suffix_id')->references('id')->on('suffix');
             $table->foreign('sex_id')->references('id')->on('sex');
-            $table->foreign('event_reservation_ticket_id')->references('id')->on('event_reservation_tickets');
+            // $table->foreign('event_reservation_ticket_id')->references('id')->on('event_reservation_tickets');
             $table->timestamps();
         });
     }
