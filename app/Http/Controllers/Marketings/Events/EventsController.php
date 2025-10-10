@@ -476,8 +476,9 @@ class EventsController extends Controller
             'venues.province',
             'venues.cityMunicipality',
             'venues.barangay',
-            // 'venue.venueTables.tableStatus',
-            // 'eventType'
+            'venues.venueTableNames.venueTables.tableRequirements',
+            'venue.venueTables.tableStatus',
+            'eventType'
         ])
         ->where('events.id', '=', $eventID)
         ->first();
@@ -569,7 +570,7 @@ class EventsController extends Controller
             'venues' => function($query) use ($venueID) {
                 $query->where('events_venues.venue_id', '=', $venueID)
                     ->with([
-                        'venueTableNames.venueTables',
+                        'venueTableNames',
                         'venueStatus',
                         'region',
                         'province',
