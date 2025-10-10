@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('event_registered_guests', function (Blueprint $table) {
             $table->id();
             $table->uuid('event_registered_guest_unique_id');
-            // $table->unsignedBigInteger('event_reservation_ticket_id');
+            $table->unsignedBigInteger('event_reservation_ticket_id');
             $table->unsignedBigInteger('user_id');
 
             $table->foreign('user_id')->references('id')->on('users');
-            // $table->foreign('event_reservation_ticket_id')->references('id')->on('event_reservation_tickets');
+            $table->foreign('event_reservation_ticket_id')->references('id')->on('event_reservation_tickets');
             $table->timestamps();
         });
     }

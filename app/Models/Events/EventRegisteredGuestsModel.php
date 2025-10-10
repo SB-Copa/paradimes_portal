@@ -16,6 +16,7 @@ class EventRegisteredGuestsModel extends Model
     
     protected $fillable = [
         'event_registered_guest_unique_id',
+        'event_reservation_ticket_id',
         'user_id',
     ];
 

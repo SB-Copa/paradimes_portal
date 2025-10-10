@@ -14,7 +14,7 @@ class EventNonRegisteredGuestsModel extends Model
     protected $table = 'event_non_registered_guests';
 
     protected $fillable = [
-        'event_non_registered_guest_unique_key',
+        'event_non_registered_guest_unique_io',
         'event_reservation_ticket_id',
         'first_name',
         'middle_name',

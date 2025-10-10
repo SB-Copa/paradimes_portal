@@ -254,6 +254,25 @@ class PurchaseTicketsAsGuests extends Controller
 
                 if (isset($guest_data['events'])) {
 
+                     $nonRegisteredUsers = NonRegisteredUsersModel::firstOrCreate(
+                        [
+                            'first_name' => $guest_data['first_name'],
+                            'middle_name' => $guest_data['middle_name'] ?? null,
+                            'last_name' => $guest_data['last_name'],
+                            'suffix_id' => $guest_data['suffix_id'],
+                            'birthdate' => $guest_data['birthdate']
+                        ],
+                        [
+                            'first_name' => $guest_data['first_name'],
+                            'middle_name' => $guest_data['middle_name'] ?? null,
+                            'last_name' => $guest_data['last_name'],
+                            'suffix_id' => $guest_data['suffix_id'],
+                            'birthdate' => $guest_data['birthdate'],
+                            'sex_id' => $guest_data['sex_id'],
+                            'email' => $guest_data['email'],
+                        ]
+                    );
+
                     foreach ($guest_data['events'] as $event_key => $event_value) {
 
                         foreach ($event_value['venue_table_reservations'] as $venue_table_reservations_key => $venue_table_reservations_value) {
@@ -286,23 +305,15 @@ class PurchaseTicketsAsGuests extends Controller
                                 );
 
                                 //put non registered users here
-                                NonRegisteredUsersModel::firstOrCreate(
-                                    [
-
-                                    ],
-                                    [
-                                        
-                                    ]
-                                );
-
+                        
                                 ModelHasVenueTableReservations::create([
-                                    'model_type' => get_class($venueTableNonRegisteredGuest),
-                                    'model_id' => $venueTableNonRegisteredGuest->id,
+                                    'model_type' => get_class($nonRegisteredUsers),
+                                    'model_id' => $nonRegisteredUsers->id,
                                     'venue_table_reservation_id' => $venueTableReservations->id
                                 ]);
 
                                 
-                                
+                                //for guests
 
                                 foreach ($venue_table_reservations_value['guests'] as $venue_guest_key => $venue_guest_value) {
 
@@ -318,8 +329,7 @@ class PurchaseTicketsAsGuests extends Controller
                                             'user_id' => $user->id,
                                         ]);
 
-                                        
-                                    } else {
+                                    }else{
 
                                         $venueTableNonRegisteredGuest = VenueTableNonRegisteredGuestsModel::create([
                                             'first_name' => $venue_guest_value['first_name'],
@@ -353,13 +363,8 @@ class PurchaseTicketsAsGuests extends Controller
                                 ->first();
 
                             if (!$eventTicketType) {
-                                DB::rollback();
                                 throw new \Exception('Ticket type not found');
-                            }
-
-
-                            if ($eventTicketType['available_tickets'] < $event_ticket_value['quantity']) {
-                                DB::rollback();
+                            }else if ($eventTicketType['available_tickets'] < $event_ticket_value['quantity']) {
                                 throw new \Exception('Not enough tickets available');
                             }
 
@@ -376,10 +381,11 @@ class PurchaseTicketsAsGuests extends Controller
                                 // $eventTicketType->available_tickets -= $event_ticket_value['quantity'];
                                 // $eventTicketType->save();
                                 $eventTicketType->decrement('available_tickets', $event_ticket_value['quantity']);
-                            } else {
 
+                                //non registered user
+                                // ModelHasEventReservationsModel
 
-
+                             
                                 //Guests
                                 if (isset($event_ticket_value['guests'])) {
 
@@ -398,11 +404,7 @@ class PurchaseTicketsAsGuests extends Controller
                                                 'user_id' => $user->id
                                             ]);
 
-                                            ModelHasEventReservationsModel::create([
-                                                'model_type' => get_class($eventRegisteredGuest),
-                                                'model_id' => $eventRegisteredGuest->id,
-                                                'venue_table_reservation_id' => $venueTableReservations->id
-                                            ]);
+                                     
                                         } else {
                                             $eventNonRegisteredGuests = EventNonRegisteredGuestsModel::firstOrCreate(
                                                 [
