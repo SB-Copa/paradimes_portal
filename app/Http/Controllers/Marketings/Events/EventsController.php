@@ -477,7 +477,7 @@ class EventsController extends Controller
             'venues.cityMunicipality',
             'venues.barangay',
             'venues.venueTableNames.venueTables.tableRequirements',
-            'venue.venueTables.tableStatus',
+            'venues.venueTables.tableStatus',
             'eventType'
         ])
         ->where('events.id', '=', $eventID)
