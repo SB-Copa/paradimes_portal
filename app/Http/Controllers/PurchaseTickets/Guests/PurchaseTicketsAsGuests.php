@@ -136,10 +136,6 @@ class PurchaseTicketsAsGuests extends Controller
                         }
                     }
                 ],
-                'events.*.venue_table_reservations.*.quantity' => [
-                    'required',
-                    'integer',
-                ],
                 'events.*.venue_table_reservations.*.description' => 'nullable|string',
                 'events.*.venue_table_reservations.*.guests' => [
                     'nullable',
@@ -156,8 +152,8 @@ class PurchaseTicketsAsGuests extends Controller
                             $venueTableID =  $request->input("events.{$index}.venue_table_reservations.{$index2}.venue_table_id");
 
                             $venueTable = VenueTablesModel::find($venueTableID);
-
-                            $totalCapacity = $venueTable['capacity'] * $quantity;
+                         
+                            $totalCapacity = $venueTable['capacity'];
 
                             if ((count($value) > $totalCapacity) || ($totalCapacity <= 0 && count($value)) > 0) {
                                 $fail('The guests must not be greater than the quantity.');
@@ -291,6 +287,7 @@ class PurchaseTicketsAsGuests extends Controller
                                 throw new \Exception('Venue table is already reserved');
                             } else {
 
+                               
                                 $venueTableReservations = VenueTableReservationsModel::firstOrCreate(
                                     [
                                         'venue_table_id' => $venue_table_reservations_value['venue_table_id'],
@@ -385,7 +382,6 @@ class PurchaseTicketsAsGuests extends Controller
 
                                 EventReservationsModel::create([
                                     'event_id' => $event_value->id,
-                                    ''
                                 ]);
 
                                 //non registered user
