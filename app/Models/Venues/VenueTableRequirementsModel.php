@@ -15,9 +15,7 @@ class VenueTableRequirementsModel extends Model
     protected $fillable = [
         'name',
         'description',
-        'venue_table_requirement_type_id',
         'venue_table_id',
-        'quantity',
         'price'
     ];
 

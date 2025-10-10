@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->uuid('event_unique_id');
-            $table->string('name')->nullable();
-            $table->string('title')->nullable();
+            $table->string('name');
+            $table->string('title');
             $table->string('description')->nullable();
             $table->text('about')->nullable();
             $table->boolean('is_recurring');

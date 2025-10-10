@@ -81,6 +81,7 @@ class VenuesModel extends Model
         return $this->belongsToMany(EventsModel::class,'events_venues','venue_id','event_id');
     }
 
+
     
     
 }

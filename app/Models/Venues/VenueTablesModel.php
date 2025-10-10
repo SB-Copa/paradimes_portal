@@ -29,4 +29,8 @@ class VenueTablesModel extends Model
     public function tableStatus(){
         return $this->belongsTo(VenueTableStatusesModel::class,'venue_table_status_id','id');
     }
+
+    public function tableRequirements(){
+        return $this->hasMany(VenueTableRequirementsModel::class,'venue_table_id','id');
+    }
 }

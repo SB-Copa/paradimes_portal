@@ -382,8 +382,18 @@ class PurchaseTicketsAsGuests extends Controller
                                 // $eventTicketType->save();
                                 $eventTicketType->decrement('available_tickets', $event_ticket_value['quantity']);
 
+
+                                EventReservationsModel::create([
+                                    'event_id' => $event_value->id,
+                                    ''
+                                ]);
+
                                 //non registered user
-                                // ModelHasEventReservationsModel
+                                ModelHasEventReservationsModel::create([
+                                    'model_type' => get_class($nonRegisteredUsers),
+                                    'model_id' => $nonRegisteredUsers->id,
+                                    'venue_table_reservation_id' => $venueTableReservations->id
+                                ]);
 
                              
                                 //Guests
