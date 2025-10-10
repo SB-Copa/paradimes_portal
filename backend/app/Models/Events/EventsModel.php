@@ -2,6 +2,7 @@
 
 namespace App\Models\Events;
 
+use App\Models\Venues\VenuesModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -32,9 +33,6 @@ class EventsModel extends Model
 
     protected $casts = [
         'is_recurring' => 'boolean',
-        'menu_images' => 'array',
-        'banner_images' => 'array',
-        'carousel_images' => 'array',
     ];
 
     protected static function booted()
@@ -44,6 +42,14 @@ class EventsModel extends Model
                 $model->event_unique_id = (string) Str::uuid();
             }
         });
+    }
+
+    public function venue(){
+        return $this->belongsTo(VenuesModel::class,'venue_id','id');
+    }
+
+    public function eventType(){
+        return $this->belongsTo(EventTypesModel::class,'event_type_id','id');
     }
 
 }

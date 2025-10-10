@@ -6,4 +6,4 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::post('/login',[App\Http\Controllers\Marketing\Auth\MarketingAuthController::class,'login']);
+Route::post('/admin/login',[App\Http\Controllers\Marketing\Auth\MarketingAuthController::class,'login']);
