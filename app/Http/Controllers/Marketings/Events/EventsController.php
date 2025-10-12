@@ -90,7 +90,7 @@ class EventsController extends Controller
                 '*.venue_table_names.*.venue_table_requirements' => 'required|array',
                 '*.venue_table_names.*.venue_table_requirements.*.name' => 'required|string',
                 '*.venue_table_names.*.venue_table_requirements.*.price' => 'required|decimal:2',
-                '*.venue_table_names.*.venue_table_requirements.*.capacity' => 'integer|decimal:2',
+                '*.venue_table_names.*.venue_table_requirements.*.capacity' => 'integer|required',
                 '*.venue_table_names.*.venue_table_requirements.*.description' => 'nullable|decimal:2',
                 
             ]);
