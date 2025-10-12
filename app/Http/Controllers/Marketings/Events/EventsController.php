@@ -7,7 +7,7 @@ use App\Models\Events\EventsModel;
 use App\Models\Events\EventsVenuesModel;
 use App\Models\Events\EventTicketTypesModel;
 use App\Models\Events\EventTypesModel;
-use App\Models\Marketings\ModelHasEvents;
+use App\Models\Events\ModelHasEvents;
 use App\Models\Venues\ModelHasTableRequirements;
 use App\Models\Venues\ModelHasVenueTableRequirements;
 use App\Models\Venues\ModelHasVenueTables;
@@ -56,7 +56,7 @@ class EventsController extends Controller
              * Venue
              * 
              */
-   
+
             $venue_validator = Validator::make($request->venues, [
                 '*.name' => 'required|string|unique:venues,name',
                 '*.address' => 'nullable|string',
@@ -92,7 +92,7 @@ class EventsController extends Controller
                 '*.venue_table_names.*.venue_table_requirements.*.price' => 'required|decimal:2',
                 '*.venue_table_names.*.venue_table_requirements.*.capacity' => 'integer|required',
                 '*.venue_table_names.*.venue_table_requirements.*.description' => 'nullable|decimal:2',
-                
+
             ]);
 
 
@@ -107,140 +107,135 @@ class EventsController extends Controller
             $venue_data = $venue_validator->validated();
 
             $venues_ids = [];
-            foreach($venue_data as $venue_key => $venue_value){
+            foreach ($venue_data as $venue_key => $venue_value) {
 
-     
-                    $venue_banners = [];
-                    if($request->hasFile("venues.$venue_key.banner_images")) {
 
-                        foreach ($request->file("venues.$venue_key.banner_images") as $image) {
-                            $img = Image::read($image)
-                                ->resize(1200, null, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                })
-                                ->encode(); // re-encode to clean file
+                $venue_banners = [];
+                if ($request->hasFile("venues.$venue_key.banner_images")) {
 
-                            $filename = uniqid() . '.' . $image->getClientOriginalExtension();
-                            Storage::disk('private')->put('venue_banner_images/' . $filename, $img);
-                            $venue_banners[] = 'venue_banner_images/' . $filename;
-                        }
+                    foreach ($request->file("venues.$venue_key.banner_images") as $image) {
+                        $img = Image::read($image)
+                            ->resize(1200, null, function ($constraint) {
+                                $constraint->aspectRatio();
+                            })
+                            ->encode(); // re-encode to clean file
+
+                        $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+                        Storage::disk('private')->put('venue_banner_images/' . $filename, $img);
+                        $venue_banners[] = 'venue_banner_images/' . $filename;
                     }
+                }
 
 
-                    $venue_carousel_images = [];
-                    if ($request->hasFile("venues.$venue_key.carousel_images")) {
-                        foreach ($request->file("venues.$venue_key.carousel_images") as $image) {
-                            $img = Image::read($image)
-                                ->resize(1200, null, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                })
-                                ->encode(); // re-encode to clean file
+                $venue_carousel_images = [];
+                if ($request->hasFile("venues.$venue_key.carousel_images")) {
+                    foreach ($request->file("venues.$venue_key.carousel_images") as $image) {
+                        $img = Image::read($image)
+                            ->resize(1200, null, function ($constraint) {
+                                $constraint->aspectRatio();
+                            })
+                            ->encode(); // re-encode to clean file
 
-                            $filename = uniqid() . '.' . $image->getClientOriginalExtension();
-                            Storage::disk('private')->put('venue_carousel_images/' . $filename, $img);
-                            $venue_carousel_images[] = 'venue_carousel_images/' . $filename;
-                        }
+                        $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+                        Storage::disk('private')->put('venue_carousel_images/' . $filename, $img);
+                        $venue_carousel_images[] = 'venue_carousel_images/' . $filename;
                     }
+                }
 
-                    $venue_menu_images = [];
-                    if ($request->hasFile("venues.$venue_key.menu_images")) {
-                        foreach ($request->file("venues.$venue_key.menu_images") as $image) {
-                            $img = Image::read($image)
-                                ->resize(1200, null, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                })
-                                ->encode(); // re-encode to clean file
+                $venue_menu_images = [];
+                if ($request->hasFile("venues.$venue_key.menu_images")) {
+                    foreach ($request->file("venues.$venue_key.menu_images") as $image) {
+                        $img = Image::read($image)
+                            ->resize(1200, null, function ($constraint) {
+                                $constraint->aspectRatio();
+                            })
+                            ->encode(); // re-encode to clean file
 
-                            $filename = uniqid() . '.' . $image->getClientOriginalExtension();
-                            Storage::disk('private')->put('venue_menu_images/' . $filename, $img);
-                            $venue_menu_images[] = 'venue_menu_images/' . $filename;
-                        }
+                        $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+                        Storage::disk('private')->put('venue_menu_images/' . $filename, $img);
+                        $venue_menu_images[] = 'venue_menu_images/' . $filename;
                     }
-                
-                      $venue = VenuesModel::create([
-                        'name' => $venue_value['name'],
-                        'address' => $venue_value['address'] ?? null,
-                        'region_id' => $venue_value['region_id'],
-                        'province_id' => $venue_value['province_id'],
-                        'municipality_id' => $venue_value['municipality_id'],
-                        'barangay_id' => $venue_value['barangay_id'],
-                        'contact_number' => $venue_value['contact_number'],
-                        'email' => $venue_value['email'] ?? null,
-                        'websites' => $venue_value['websites'] ?? null, // should be JSON cast in your model
-                        'capacity' => $venue_value['capacity'],
-                        'user_count' => $venue_value['user_count'],
-                        'table_count' => $venue_value['table_count'],
-                        'menu' => $venue_value['menu'] ?? null,
-                        'about' => $venue_value['about'] ?? null,
-                        'venue_status_id' => $venue_value['venue_status_id'],
+                }
 
+                $venue = VenuesModel::create([
+                    'name' => $venue_value['name'],
+                    'address' => $venue_value['address'] ?? null,
+                    'region_id' => $venue_value['region_id'],
+                    'province_id' => $venue_value['province_id'],
+                    'municipality_id' => $venue_value['municipality_id'],
+                    'barangay_id' => $venue_value['barangay_id'],
+                    'contact_number' => $venue_value['contact_number'],
+                    'email' => $venue_value['email'] ?? null,
+                    'websites' => $venue_value['websites'] ?? null, // should be JSON cast in your model
+                    'capacity' => $venue_value['capacity'],
+                    'user_count' => $venue_value['user_count'],
+                    'table_count' => $venue_value['table_count'],
+                    'menu' => $venue_value['menu'] ?? null,
+                    'about' => $venue_value['about'] ?? null,
+                    'venue_status_id' => $venue_value['venue_status_id'],
+
+                ]);
+
+
+                //count the number of tables
+                $count_tables = 0;
+
+                foreach ($venue_value['venue_table_names'] as $venue_table_names_key => $venue_table_names_value) {
+                    $count_tables += count($venue_table_names_value['venue_tables']);
+                }
+
+
+                if ($venue_value['table_count'] != $count_tables) {
+                    return response()->json('Table count and venue tables mismatch.', 400);
+                }
+
+                foreach ($venue_value['venue_table_names'] as $venue_tables_key => $venue_table_names_value) {
+
+                    $venue_table_name = VenueTableNamesModel::firstOrCreate([
+                        'name' => $venue_table_names_value['name'],
+                        'venue_id' => $venue->id
                     ]);
 
-                 
-                    //count the number of tables
-                    $count_tables = 0;
 
-                    foreach($venue_value['venue_table_names'] as $venue_table_names_key => $venue_table_names_value){
-                        $count_tables+=count($venue_table_names_value['venue_tables']);
+                    if (isset($venue_table_names_value['venue_table_requirements']) && !empty($venue_table_names_value['venue_table_requirements'])) {
+                        foreach ($venue_table_names_value['venue_table_requirements'] as $venue_table_requirements_key => $venue_table_requirements_value) {
+
+                            $venue_table_requirements = VenueTableRequirementsModel::create([
+                                'name' => $venue_table_requirements_value['name'],
+                                'description' => $venue_table_requirements_value['description'],
+                                'price' => $venue_table_requirements_value['price'],
+                                'capacity' => $venue_table_requirements_value['capacity'],
+                            ]);
+
+                            ModelHasVenueTableRequirements::create([
+                                'model_type' => get_class($venue_table_name),
+                                'model_id' => $venue_table_name->id,
+                                'venue_table_requirement_id' => $venue_table_requirements->id
+                            ]);
+                        }
                     }
-             
 
-                    if ($venue_value['table_count'] != $count_tables) {
-                        return response()->json('Table count and venue tables mismatch.', 400);
-                    }
+                    foreach ($venue_table_names_value['venue_tables'] as $venue_tables_key => $venue_tables_value) {
 
-                    foreach ($venue_value['venue_table_names'] as $venue_tables_key => $venue_table_names_value) {
-                  
-                        $venue_table_name = VenueTableNamesModel::firstOrCreate([
-                            'name' => $venue_table_names_value['name'],
-                            'venue_id' => $venue->id
+                        $venueTables = VenueTablesModel::firstOrCreate([
+                            'venue_table_name_id' => $venue_table_name->id,
+                            'venue_id' => $venue->id,
+                            'capacity' => $venue_tables_value['capacity'],
+                            'venue_table_status_id' => $venue_tables_value['venue_table_status_id'],
+                            'legend' => $venue_tables_value['legend'],
                         ]);
 
 
-                        if(isset($venue_table_names_value['venue_table_requirements']) && !empty($venue_table_names_value['venue_table_requirements'])){
-                            foreach($venue_table_names_value['venue_table_requirements'] as $venue_table_requirements_key => $venue_table_requirements_value){
-                            
-                                $venue_table_requirements = VenueTableRequirementsModel::create([
-                                    'name' => $venue_table_requirements_value['name'],
-                                    'description' => $venue_table_requirements_value['description'],
-                                    'price' => $venue_table_requirements_value['price'],
-                                    'capacity' => $venue_table_requirements_value['capacity'],
-                                ]);
 
-                                ModelHasVenueTableRequirements::create([
-                                    'model_type' => get_class($venue_table_name),
-                                    'model_id' => $venue_table_name->id,
-                                    'venue_table_requirement_id' => $venue_table_requirements->id
-                                ]);
-
-                            }
-                        }
-                   
-                        foreach($venue_table_names_value['venue_tables'] as $venue_tables_key => $venue_tables_value){
-                           
-                            $venueTables = VenueTablesModel::firstOrCreate([
-                                'venue_table_name_id' => $venue_table_name->id,
-                                'venue_id' => $venue->id,
-                                'capacity' => $venue_tables_value['capacity'],
-                                'venue_table_status_id' => $venue_tables_value['venue_table_status_id'],
-                                // 'user_type' => get_class(Auth::user()) ?? 'App\Models\Auth\UserModel',
-                                // 'user_id' => Auth::user()->id ?? '1',
-                                'legend' => $venue_tables_value['legend'],
-                            ]);
-
-                  
-                              
-                            $modelHasVenueTables = ModelHasVenueTables::firstOrCreate([
-                                'model_type' => 'App\Models\Auth\UserModel',
-                                'model_id' => '1',
-                                'venue_table_id' => $venueTables->id,
-                            ]);
-
-                        }
-
+                        $modelHasVenueTables = ModelHasVenueTables::firstOrCreate([
+                            'model_type' => 'App\Models\Auth\UserModel',
+                            'model_id' => '1',
+                            'venue_table_id' => $venueTables->id,
+                        ]);
                     }
+                }
 
-              
+
 
                 $venues_ids[] = $venue->id;
             }
@@ -280,7 +275,7 @@ class EventsController extends Controller
             }
 
             $event_data = $event_validator->validated();
-      
+
             $event_banners = [];
             if ($request->hasFile('event.banner_images')) {
 
@@ -347,21 +342,21 @@ class EventsController extends Controller
                 'carousel_images' => $event_data['carousel_images'] ? json_encode($event_data['carousel_images']) : null,
             ]);
 
-            
+
 
             /**
              * 
              * Ticket types per event
              * 
              */
-   
+
             foreach ($event_data['event_ticket_types'] as $key => $value) {
-          
+
                 EventTicketTypesModel::create([
                     'event_id' => $event->id,
                     'name' => $value['name'],
                     'description' => $value['description'] ?? null,
-                    'price' => $value['price'], 
+                    'price' => $value['price'],
                     'available_tickets' => $value['available_tickets']
                 ]);
             }
@@ -375,22 +370,22 @@ class EventsController extends Controller
             $modelHasEvents = ModelHasEvents::create([
                 // 'model_type' => get_class(Auth::user()),
                 // 'model_id' => Auth::user()->id,
-                'model_type' => 'App\Models\Auth\UserModel',
-                'model_id' => '1',
+                'model_type' => 'App\Models\Marketings\MarketingCompaniesMarketingUsersModel',
+                'model_id' => 1,
                 'event_id' => $event->id
             ]);
-            
-             /**
+
+            /**
              * 
              * many to many for events and venues
              * 
              */
 
-            foreach($venues_ids as $venues_ids_key => $venues_ids_value){
-                     EventsVenuesModel::firstOrCreate([
-                        'event_id' => $event->id,
-                        'venue_id' => $venues_ids_value,
-                    ]);
+            foreach ($venues_ids as $venues_ids_key => $venues_ids_value) {
+                EventsVenuesModel::firstOrCreate([
+                    'event_id' => $event->id,
+                    'venue_id' => $venues_ids_value,
+                ]);
             }
 
 
@@ -422,24 +417,43 @@ class EventsController extends Controller
 
     public function updateEventType(Request $request, string $eventTypeID)
     {
-        try{
-        DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
-        
-        $event_types = EventTypesModel::find($eventTypeID);
-        $event_types->type = $request->input('type');
-        $event_types->save();    
 
-        return response()->json('Event type updated successfully', 201);
+            $event_types = EventTypesModel::find($eventTypeID);
+            $event_types->type = $request->input('type');
+            $event_types->save();
 
-        DB::commit();
-        }catch(Exception $e){
-             // Rollback on error
+            return response()->json('Event type updated successfully', 201);
+
+            DB::commit();
+        } catch (Exception $e) {
+            // Rollback on error
             DB::rollBack();
             // Handle the exception
             throw $e;
         }
+    }
 
+    public function deleteEventType(Request $request, string $eventTypeID)
+    {
+        try {
+            DB::beginTransaction();
+
+
+            $event_types = EventTypesModel::find($eventTypeID);
+            $event_types->delete();
+
+            return response()->json('Event type deleted successfully', 201);
+
+            DB::commit();
+        } catch (Exception $e) {
+            // Rollback on error
+            DB::rollBack();
+            // Handle the exception
+            throw $e;
+        }
     }
 
     public function showEvents()
@@ -451,14 +465,14 @@ class EventsController extends Controller
     }
 
 
-     /**
+    /**
      * Display the specified resource.
      */
     public function showSpecificEvent(string $id)
     {
         //
 
-        
+
 
         $events = EventsModel::with([
             // 'venue.venueStatus',
@@ -469,65 +483,155 @@ class EventsController extends Controller
             // 'venue.venueTables.tableStatus',
             'eventType'
         ])
-        ->where('events.id', '=', $id)
-        ->first();
+            ->where('events.id', '=', $id)
+            ->first();
 
 
         return response()->json($events, 201);
     }
 
+    public function updateSpecificEvent(Request $request, $id)
+    {
+        try {
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'about' => 'nullable|string',
+                'is_recurring' => 'required|boolean',
+                'capacity' => 'required|integer|min:1',
+                'menu_images' => 'nullable|json',
+                'banner_images' => 'nullable|json',
+                'carousel_images' => 'nullable|json',
+                'event_type_id' => 'required|integer|exists:event_types,id',
+            ]);
+
+
+            $event = EventsModel::with(['eventType'])
+                ->where('id', $id)
+                ->first();
+
+            if (!$event) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Event not found.'
+                ], 404);
+            }
+
+            $event->update($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Event updated successfully.',
+                'data' => $event
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Handle validation errors
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            // Handle other unexpected errors
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating the event.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+
+    public function deleteSpecificEvent($id)
+    {
+        try {
+      
+            $event = EventsModel::with([
+                'marketingOwnerMarketingCompanies.marketingOwner',
+                'eventReservation.users',
+            ])->get();
+
+            return response()->json($event);
+            
+            if (!$event) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Event not found.'
+                ], 404);
+            }
+
+
+            $event->delete();
+
+           
+            return response()->json([
+                'success' => true,
+                'message' => 'Event deleted successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            // 4️⃣ Handle unexpected errors
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while deleting the event.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+
     public function showEventVenues(string $eventID)
     {
 
-        try{
+        try {
 
-        $events = EventsModel::with([
-            'venues.venueStatus',
-            'venues.region',
-            'venues.province',
-            'venues.cityMunicipality',
-            'venues.barangay',
-            'venues.venueTableNames.venueTableRequirements',
-            'venues.venueTables.tableStatus',
-            'eventType'
-        ])
-        ->where('events.id', '=', $eventID)
-        ->first();
+            $events = EventsModel::with([
+                'venues.venueStatus',
+                'venues.region',
+                'venues.province',
+                'venues.cityMunicipality',
+                'venues.barangay',
+                'venues.venueTableNames.venueTableRequirements',
+                'venues.venueTables.tableStatus',
+                'eventType'
+            ])
+                ->where('events.id', '=', $eventID)
+                ->first();
 
 
-        return response()->json($events, 201);
-          
-        }catch(Exception $e){
+            return response()->json($events, 201);
+        } catch (Exception $e) {
             throw $e;
         }
     }
 
     public function showEventSpecificVenue(string $eventID, string $venueID)
     {
-        try{
-         
-        $events = EventsModel::with([
-            'venues' => function($query) use ($venueID){
-                $query->where('events_venues.venue_id','=',$venueID);
-            },
-            'venues.venueStatus',
-            'venues.region',
-            'venues.province',
-            'venues.cityMunicipality',
-            'venues.barangay',
-            // 'venue.venueTables.tableStatus',
-            'eventType'
-        ])
-        ->whereHas('venues',function($query) use ($venueID){
-            $query->where('venues.id','=',$venueID);
-        })
-        ->where('events.id', '=', $eventID)
-        ->first();
+        try {
+
+            $events = EventsModel::with([
+                'venues' => function ($query) use ($venueID) {
+                    $query->where('events_venues.venue_id', '=', $venueID);
+                },
+                'venues.venueStatus',
+                'venues.region',
+                'venues.province',
+                'venues.cityMunicipality',
+                'venues.barangay',
+                // 'venue.venueTables.tableStatus',
+                'eventType'
+            ])
+                ->whereHas('venues', function ($query) use ($venueID) {
+                    $query->where('venues.id', '=', $venueID);
+                })
+                ->where('events.id', '=', $eventID)
+                ->first();
 
 
-        return response()->json($events, 201);
-          
-        }catch(Exception $e){
+            return response()->json($events, 201);
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -541,235 +645,225 @@ class EventsController extends Controller
     public function showEventVenuesTables(string $eventID, string $venueID)
     {
 
-        try{
-            
-      
-        $events = EventsModel::with([
-            'venues' => function($query) use ($venueID){
-                $query->where('events_venues.venue_id','=',$venueID);
-            },
-            'venues.venueStatus',
-            'venues.region',
-            'venues.province',
-            'venues.cityMunicipality',
-            'venues.barangay',
-            'venues.venueTableNames.venueTableRequirements',
-            'venues.venueTableNames.venueTables',
-            'eventType'
-        ])
-        ->whereHas('venues',function($query) use ($venueID){
-            $query->where('events_venues.venue_id','=',$venueID);
-        })
-        ->where('events.id', '=', $eventID)
-        ->first();
+        try {
 
 
-        return response()->json($events, 201);
+            $events = EventsModel::with([
+                'venues' => function ($query) use ($venueID) {
+                    $query->where('events_venues.venue_id', '=', $venueID);
+                },
+                'venues.venueStatus',
+                'venues.region',
+                'venues.province',
+                'venues.cityMunicipality',
+                'venues.barangay',
+                'venues.venueTableNames.venueTableRequirements',
+                'venues.venueTableNames.venueTables',
+                'eventType'
+            ])
+                ->whereHas('venues', function ($query) use ($venueID) {
+                    $query->where('events_venues.venue_id', '=', $venueID);
+                })
+                ->where('events.id', '=', $eventID)
+                ->first();
 
-        }catch(Exception $e){
+
+            return response()->json($events, 201);
+        } catch (Exception $e) {
             throw $e;
         }
-
     }
 
     public function showEventVenuesTableNames(string $eventID, string $venueID,)
     {
 
-        try{
-            
-      
-        $events = EventsModel::with([
-            'venues' => function($query) use ($venueID) {
-                $query->where('events_venues.venue_id', '=', $venueID)
-                    ->with([
-                        'venueTableNames',
-                        'venueStatus',
-                        'region',
-                        'province',
-                        'cityMunicipality',
-                        'barangay',
-                    ]);
-            },
-            'eventType'
-        ])
-        ->whereHas('venues', function($query) use ($venueID) {
-            $query->where('events_venues.venue_id', '=', $venueID);
-        })
-        ->where('events.id', '=', $eventID)
-        ->first();
+        try {
+
+
+            $events = EventsModel::with([
+                'venues' => function ($query) use ($venueID) {
+                    $query->where('events_venues.venue_id', '=', $venueID)
+                        ->with([
+                            'venueTableNames',
+                            'venueStatus',
+                            'region',
+                            'province',
+                            'cityMunicipality',
+                            'barangay',
+                        ]);
+                },
+                'eventType'
+            ])
+                ->whereHas('venues', function ($query) use ($venueID) {
+                    $query->where('events_venues.venue_id', '=', $venueID);
+                })
+                ->where('events.id', '=', $eventID)
+                ->first();
 
 
 
-        return response()->json($events, 201);
-
-        }catch(Exception $e){
-            throw $e;
-        }
-
-    }
-
-    public function showEventVenuesTableNamesSpecificTicketTypes(string $eventID, string $venueID, string $venueTableNameID){
-
-
-        try{
-            
-      
-        $events = EventsModel::with([
-            'venues' => function($query) use ($venueID, $venueTableNameID) {
-                $query->where('events_venues.venue_id', '=', $venueID)
-                    ->with([
-                        'venueTableNames' => function($query) use($venueTableNameID){
-                            $query->where('venue_table_names.id','=', $venueTableNameID)->with([
-                                'venueTableRequirements',
-                                'venueTables'
-                            ]);
-                        },
-                        'venueStatus',
-                        'region',
-                        'province',
-                        'cityMunicipality',
-                        'barangay',
-                    ]);
-            },
-            'eventType'
-        ])
-        ->whereHas('venues', function($query) use ($venueID) {
-            $query->where('events_venues.venue_id', '=', $venueID);
-        })
-        ->where('events.id', '=', $eventID)
-        ->first();
-
-
-
-        return response()->json($events, 201);
-
-        }catch(Exception $e){
+            return response()->json($events, 201);
+        } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public function showEventVenuesTableNamesTables(string $eventID, string $venueID, string $venueTableNameID){
-
-         try{
-            
-      
-        $events = EventsModel::with([
-            'venues' => function($query) use ($venueID, $venueTableNameID) {
-                $query->where('events_venues.venue_id', '=', $venueID)
-                    ->with([
-                        'venueTableNames' => function($query) use($venueTableNameID){
-                            $query->where('venue_table_names.id','=', $venueTableNameID)->with([
-                                'venueTableRequirements',
-                                'venueTables'
-                            ]);
-                        },
-                        'venueStatus',
-                        'region',
-                        'province',
-                        'cityMunicipality',
-                        'barangay',
-                    ]);
-            },
-            'eventType'
-        ])
-        ->whereHas('venues', function($query) use ($venueID) {
-            $query->where('events_venues.venue_id', '=', $venueID);
-        })
-        ->where('events.id', '=', $eventID)
-        ->first();
+    public function showEventVenuesTableNamesSpecificTicketTypes(string $eventID, string $venueID, string $venueTableNameID)
+    {
 
 
+        try {
 
-        return response()->json($events, 201);
 
-        }catch(Exception $e){
+            $events = EventsModel::with([
+                'venues' => function ($query) use ($venueID, $venueTableNameID) {
+                    $query->where('events_venues.venue_id', '=', $venueID)
+                        ->with([
+                            'venueTableNames' => function ($query) use ($venueTableNameID) {
+                                $query->where('venue_table_names.id', '=', $venueTableNameID)->with([
+                                    'venueTableRequirements',
+                                    'venueTables'
+                                ]);
+                            },
+                            'venueStatus',
+                            'region',
+                            'province',
+                            'cityMunicipality',
+                            'barangay',
+                        ]);
+                },
+                'eventType'
+            ])
+                ->whereHas('venues', function ($query) use ($venueID) {
+                    $query->where('events_venues.venue_id', '=', $venueID);
+                })
+                ->where('events.id', '=', $eventID)
+                ->first();
+
+
+
+            return response()->json($events, 201);
+        } catch (Exception $e) {
             throw $e;
         }
+    }
 
+    public function showEventVenuesTableNamesTables(string $eventID, string $venueID, string $venueTableNameID)
+    {
+
+        try {
+
+
+            $events = EventsModel::with([
+                'venues' => function ($query) use ($venueID, $venueTableNameID) {
+                    $query->where('events_venues.venue_id', '=', $venueID)
+                        ->with([
+                            'venueTableNames' => function ($query) use ($venueTableNameID) {
+                                $query->where('venue_table_names.id', '=', $venueTableNameID)->with([
+                                    'venueTableRequirements',
+                                    'venueTables'
+                                ]);
+                            },
+                            'venueStatus',
+                            'region',
+                            'province',
+                            'cityMunicipality',
+                            'barangay',
+                        ]);
+                },
+                'eventType'
+            ])
+                ->whereHas('venues', function ($query) use ($venueID) {
+                    $query->where('events_venues.venue_id', '=', $venueID);
+                })
+                ->where('events.id', '=', $eventID)
+                ->first();
+
+
+
+            return response()->json($events, 201);
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     public function showEventVenuesTableNamesSpecificTables(string $eventID, string $venueID, string $venueTableNameID, string $venueTableID)
     {
 
-        
-       
-         try{
-            
-      
-        $events = EventsModel::with([
-            'venues' => function($query) use ($venueID, $venueTableNameID, $venueTableID) {
-                $query->where('events_venues.venue_id', '=', $venueID)
-                    ->with([
-                        'venueTableNames' => function($query) use($venueTableNameID, $venueTableID){
-                            $query->where('venue_table_names.id','=', $venueTableNameID)->with([
-                                'venueTableRequirements',
-                                'venueTables' => function($query) use ($venueTableID){
-                                    $query->where('venue_tables.id','=',$venueTableID);
-                                }
-                            ]);
-                        },
-                        'venueStatus',
-                        'region',
-                        'province',
-                        'cityMunicipality',
-                        'barangay',
-                    ]);
-            },
-            'eventType'
-        ])
-        ->whereHas('venues', function($query) use ($venueID) {
-            $query->where('events_venues.venue_id', '=', $venueID);
-        })
-        ->where('events.id', '=', $eventID)
-        ->first();
+
+
+        try {
+
+
+            $events = EventsModel::with([
+                'venues' => function ($query) use ($venueID, $venueTableNameID, $venueTableID) {
+                    $query->where('events_venues.venue_id', '=', $venueID)
+                        ->with([
+                            'venueTableNames' => function ($query) use ($venueTableNameID, $venueTableID) {
+                                $query->where('venue_table_names.id', '=', $venueTableNameID)->with([
+                                    'venueTableRequirements',
+                                    'venueTables' => function ($query) use ($venueTableID) {
+                                        $query->where('venue_tables.id', '=', $venueTableID);
+                                    }
+                                ]);
+                            },
+                            'venueStatus',
+                            'region',
+                            'province',
+                            'cityMunicipality',
+                            'barangay',
+                        ]);
+                },
+                'eventType'
+            ])
+                ->whereHas('venues', function ($query) use ($venueID) {
+                    $query->where('events_venues.venue_id', '=', $venueID);
+                })
+                ->where('events.id', '=', $eventID)
+                ->first();
 
 
 
-        return response()->json($events, 201);
-
-        }catch(Exception $e){
+            return response()->json($events, 201);
+        } catch (Exception $e) {
             throw $e;
         }
-
     }
 
 
-    public function showEventTicketTypes(string $eventID){
+    public function showEventTicketTypes(string $eventID)
+    {
 
-        try{
+        try {
 
             $event_tickets = EventsModel::with([
                 'eventTicketTypes'
             ])
-            ->where('events.id','=',$eventID)
-            ->first();
+                ->where('events.id', '=', $eventID)
+                ->first();
 
             return response()->json($event_tickets);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
         }
-        
     }
 
-    public function showEventSpecificTicketType(string $eventID,string $ticketTypeID){
-        
-         try{
-           
+    public function showEventSpecificTicketType(string $eventID, string $ticketTypeID)
+    {
+
+        try {
+
             $event_ticket_type = EventsModel::with([
-                'eventTicketTypes' => function($query) use ($ticketTypeID){
-                    $query->where('event_ticket_types.id','=',$ticketTypeID);
+                'eventTicketTypes' => function ($query) use ($ticketTypeID) {
+                    $query->where('event_ticket_types.id', '=', $ticketTypeID);
                 }
             ])
-            ->where('events.id','=',$eventID)
-            ->first();
+                ->where('events.id', '=', $eventID)
+                ->first();
 
             return response()->json($event_ticket_type);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
         }
     }
-
-    
-
-   
 }

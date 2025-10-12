@@ -26,7 +26,7 @@ Route::post('/admin/add-events',[App\Http\Controllers\Marketings\Events\EventsCo
 Route::get('/admin/event-types',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventTypes']);
 Route::get('/admin/event-types/{eventTypeID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showSpecificEventType']);
 Route::patch('/admin/event-types/{eventTypeID}/update',[App\Http\Controllers\Marketings\Events\EventsController::class,'updateEventType']);
-
+Route::delete('/admin/event-types/{eventTypeID}/delete',[App\Http\Controllers\Marketings\Events\EventsController::class,'deleteEventType']);
 /**
  * 
  * 
@@ -36,6 +36,9 @@ Route::patch('/admin/event-types/{eventTypeID}/update',[App\Http\Controllers\Mar
 
 Route::get('/admin/events',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEvents']);
 Route::get('/admin/events/{eventID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showSpecificEvent']);
+Route::patch('/admin/events/{eventID}/update',[App\Http\Controllers\Marketings\Events\EventsController::class,'updateSpecificEvent']);
+Route::get('/admin/events/{eventID}/delete',[App\Http\Controllers\Marketings\Events\EventsController::class,'deleteSpecificEvent']);
+
 Route::get('/admin/events/{eventID}/venues',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenues']);
 Route::get('/admin/events/{eventID}/venues/{venueID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventSpecificVenue']);
 

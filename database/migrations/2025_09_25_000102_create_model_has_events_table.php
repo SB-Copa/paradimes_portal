@@ -29,4 +29,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('model_has_events');
     }
+
+
+    
 };

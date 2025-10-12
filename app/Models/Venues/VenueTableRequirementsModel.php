@@ -23,7 +23,7 @@ class VenueTableRequirementsModel extends Model
         'price' => 'decimal:2'
     ];
 
-    protected $hidden = ['pivot'];
+    // protected $hidden = ['pivot'];
 
     public function venueTableNames()
     {
@@ -31,8 +31,8 @@ class VenueTableRequirementsModel extends Model
             VenueTableNamesModel::class,
             'model',
             'model_has_venue_table_requirements',
-            'venue_table_requirement_id',
-            'model_id'
+            'venue_table_requirement_id', // referes to the venue table requirement
+            'model_id' // refers to the  venue table name
         );
     }
 }

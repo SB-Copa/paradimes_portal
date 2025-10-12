@@ -6,19 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class EventRegisteredGuestsModel extends Model
+class EventReservationTicketGuests extends Model
 {
     /** @use HasFactory<\Database\Factories\App\Models\Events\EventRegisteredGuestsModelFactory> */
     use HasFactory;
 
-    protected $table = 'event_registered_guests';
+    protected $table = 'event_reservation_ticket_guests';
 
     
     protected $fillable = [
         'event_registered_guest_unique_id',
         'event_reservation_ticket_id',
-        'user_id',
+        'full_name',
+        'age',
+        'entered_datetime'
     ];
+
+
+
+
 
     /**
      * Automatically generate UUID before creating

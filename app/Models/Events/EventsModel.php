@@ -2,10 +2,14 @@
 
 namespace App\Models\Events;
 
+use App\Models\Marketings\MarketingCompaniesMarketingUsersModel;
 use App\Models\Venues\VenuesModel;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+
+use function PHPSTORM_META\map;
 
 class EventsModel extends Model
 {
@@ -41,6 +45,28 @@ class EventsModel extends Model
                 $model->event_unique_id = (string) Str::uuid();
             }
         });
+    }
+
+    public function marketingOwnerMarketingCompanies()
+    {
+        return $this->morphedByMany(
+            MarketingCompaniesMarketingUsersModel::class,
+            'model', // Class: Event
+            'model_has_events',
+            'event_id', // Event: 1 // Foreign key on pivot that refers to the Event
+            'model_id' // Marketing na user id 1 // Foreign key on pivot that refers to the Marketing User
+        );
+    }
+
+    public function eventReservation(){
+        return $this->morphedByMany(
+            EventReservationsModel::class,
+            'model',
+            'model_has_event_reservations',
+            'event_reservation_id',
+            'model_id'
+        );
+
     }
 
     public function venues(){

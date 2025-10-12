@@ -24,10 +24,10 @@ class VenueTableNamesModel extends Model
 
     public function venueTableRequirements(){
         return $this->morphToMany(
-            VenueTableRequirementsModel::class, 
-            'model', // model_type model_id
+            VenueTableRequirementsModel::class, // related model
+            'model', // model_type model_id // Class: Venue Table Requirement
             'model_has_venue_table_requirements', // pivot table
-            'model_id', // foreign key on pivot for this model 
+            'model_id', // foreign key on pivot for this model // Class ID :1
             'venue_table_requirement_id' // foreign key on pivot for related model
         );
     }

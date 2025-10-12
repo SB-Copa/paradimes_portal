@@ -10,10 +10,12 @@ class VenueTableRegisteredGuestsModel extends Model
     /** @use HasFactory<\Database\Factories\App\Models\Venues\VenueRegisteredGuestsModelFactory> */
     use HasFactory;
 
-    protected $table = 'venue_table_registered_guests';
+    protected $table = 'venue_table_reservation_guests';
 
     protected $fillable = [
-        'user_id',
+        'full_name',
+        'age',
+        'entered_datetime',
         'venue_table_reservation_id',
     ];
 }

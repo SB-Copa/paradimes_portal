@@ -17,4 +17,9 @@ class MarketingCompaniesMarketingUsersModel extends Model
         'marketing_user_id',
         'marketing_user_type_id'
     ];
+
+
+    public function marketingOwner(){
+        return $this->belongsTo(MarketingUsersModel::class,'marketing_user_id','id');
+    }
 }

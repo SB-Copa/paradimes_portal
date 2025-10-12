@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_reservation_guests', function (Blueprint $table) {
+        Schema::create('event_reservations_ticket_guests', function (Blueprint $table) {
             $table->id();
             $table->uuid('event_registered_guest_unique_id');
             $table->unsignedBigInteger('event_reservation_ticket_id');

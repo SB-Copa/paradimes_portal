@@ -24,7 +24,7 @@ class ModelHasVenueTableRequirements extends Model
     ];
 
 
-    public function venueTableRequirements(){
-        return $this->morphTo();
-    }
+    // public function venueTableRequirements(){
+    //     return $this->morphTo();
+    // }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Models\Events;
 
+use App\Models\Marketings\MarketingUsersModel;
+use App\Models\User;
+use App\Models\Users\NonRegisteredUsersModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -16,13 +19,15 @@ class EventReservationsModel extends Model
      protected $fillable = [
         'event_reservation_unique_id',
         'event_id',
+        'description',
+        // 'venue_table_reservation_id'
         // 'user_id',
         // 'user_type',
         // 'venue_table_reservation_id',
         // 'promotion_id',
-        'payment_intent_id',
-        'host_model_id',
-        'host_model_type',
+        // 'payment_intent_id',
+        // 'host_model_id',
+        // 'host_model_type',
     ];
 
     /**
@@ -35,5 +40,9 @@ class EventReservationsModel extends Model
                 $model->event_reservation_unique_id = (string) Str::uuid();
             }
         });
+    }
+
+    public function users(){
+        return $this->morphTo();
     }
 }
