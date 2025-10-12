@@ -46,6 +46,9 @@ Route::get('/admin/events/{eventID}/venues/{venueID}',[App\Http\Controllers\Mark
  */
 Route::get('/admin/events/{eventID}/venues/{venueID}/tables',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenuesTables']);
 Route::get('/admin/events/{eventID}/venues/{venueID}/table-names',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenuesTableNames']);
+Route::get('/admin/events/{eventID}/venues/{venueID}/table-names/{tableNameID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenuesTableNamesSpecificTicketTypes']);
+
+Route::get('/admin/events/{eventID}/venues/{venueID}/table-names/{tableNameID}/tables',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenuesTableNamesTables']);
 Route::get('/admin/events/{eventID}/venues/{venueID}/table-names/{tableNameID}/tables/{tableID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenuesTableNamesSpecificTables']);
 
 

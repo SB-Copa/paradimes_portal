@@ -8,6 +8,8 @@ use App\Models\Events\EventsVenuesModel;
 use App\Models\Events\EventTicketTypesModel;
 use App\Models\Events\EventTypesModel;
 use App\Models\Marketings\ModelHasEvents;
+use App\Models\Venues\ModelHasTableRequirements;
+use App\Models\Venues\ModelHasVenueTableRequirements;
 use App\Models\Venues\ModelHasVenueTables;
 use App\Models\Venues\VenuesModel;
 use App\Models\Venues\VenueTableNamesModel;
@@ -85,10 +87,10 @@ class EventsController extends Controller
                 '*.venue_table_names.*.venue_tables.*.venue_table_status_id' => 'required|exists:venue_table_statuses,id',
                 '*.venue_table_names.*.venue_tables.*.capacity' => 'required|integer',
                 '*.venue_table_names.*.venue_tables.*.legend' => 'required|string',
-                '*.venue_table_names.*.venue_tables.*.venue_table_requirements' => 'required|array',
-                '*.venue_table_names.*.venue_tables.*.venue_table_requirements.*.name' => 'required|string',
-                '*.venue_table_names.*.venue_tables.*.venue_table_requirements.*.price' => 'required|decimal:2',
-                '*.venue_table_names.*.venue_tables.*.venue_table_requirements.*.description' => 'nullable|decimal:2',
+                '*.venue_table_names.*.venue_table_requirements' => 'required|array',
+                '*.venue_table_names.*.venue_table_requirements.*.name' => 'required|string',
+                '*.venue_table_names.*.venue_table_requirements.*.price' => 'required|decimal:2',
+                '*.venue_table_names.*.venue_table_requirements.*.description' => 'nullable|decimal:2',
                 
             ]);
 
@@ -102,7 +104,7 @@ class EventsController extends Controller
 
 
             $venue_data = $venue_validator->validated();
-  
+
             $venues_ids = [];
             foreach($venue_data as $venue_key => $venue_value){
 
@@ -192,6 +194,25 @@ class EventsController extends Controller
                             'name' => $venue_table_names_value['name'],
                             'venue_id' => $venue->id
                         ]);
+
+
+                        if(isset($venue_table_names_value['venue_table_requirements']) && !empty($venue_table_names_value['venue_table_requirements'])){
+                            foreach($venue_table_names_value['venue_table_requirements'] as $venue_table_requirements_key => $venue_table_requirements_value){
+                            
+                                $venue_table_requirements = VenueTableRequirementsModel::create([
+                                    'name' => $venue_table_requirements_value['name'],
+                                    'description' => $venue_table_requirements_value['description'],
+                                    'price' => $venue_table_requirements_value['price']
+                                ]);
+
+                                ModelHasVenueTableRequirements::create([
+                                    'model_type' => get_class($venue_table_name),
+                                    'model_id' => $venue_table_name->id,
+                                    'venue_table_requirement_id' => $venue_table_requirements->id
+                                ]);
+
+                            }
+                        }
                    
                         foreach($venue_table_names_value['venue_tables'] as $venue_tables_key => $venue_tables_value){
                            
@@ -213,18 +234,6 @@ class EventsController extends Controller
                                 'venue_table_id' => $venueTables->id,
                             ]);
 
-           
-                            if(isset($venue_tables_value['venue_table_requirements']) && !empty($venue_tables_value['venue_table_requirements'])){
-                                foreach($venue_tables_value['venue_table_requirements'] as $venue_table_requirements_key => $venue_table_requirements_value){
-                               
-                                    VenueTableRequirementsModel::firstOrCreate([
-                                        'name' => $venue_table_requirements_value['name'],
-                                        'description' => $venue_table_requirements_value['description'],
-                                        'venue_table_id' => $venueTables->id,
-                                        'price' => $venue_table_requirements_value['price']
-                                    ]);
-                                }
-                            }
                         }
 
                     }
@@ -476,7 +485,7 @@ class EventsController extends Controller
             'venues.province',
             'venues.cityMunicipality',
             'venues.barangay',
-            'venues.venueTableNames.venueTables.tableRequirements',
+            'venues.venueTableNames.venueTableRequirements',
             'venues.venueTables.tableStatus',
             'eventType'
         ])
@@ -542,7 +551,8 @@ class EventsController extends Controller
             'venues.province',
             'venues.cityMunicipality',
             'venues.barangay',
-            'venues.venueTableNames.venueTables.tableRequirements',
+            'venues.venueTableNames.venueTableRequirements',
+            'venues.venueTableNames.venueTables',
             'eventType'
         ])
         ->whereHas('venues',function($query) use ($venueID){
@@ -596,24 +606,105 @@ class EventsController extends Controller
 
     }
 
-    public function showEventVenuesTableNamesSpecificTables(string $eventID, string $venueID, string $tableNameID ,string $tableID)
-    {
+    public function showEventVenuesTableNamesSpecificTicketTypes(string $eventID, string $venueID, string $venueTableNameID){
+
 
         try{
             
       
         $events = EventsModel::with([
-            'venues' => function($query) use ($venueID, $tableID, $tableNameID) {
+            'venues' => function($query) use ($venueID, $venueTableNameID) {
                 $query->where('events_venues.venue_id', '=', $venueID)
                     ->with([
-                        'venueTableNames' => function($query) use ($tableNameID, $tableID) {
-                            $query->where('venue_table_names.id', '=', $tableNameID)
-                                ->with([
-                                    'venueTables' => function($query) use ($tableID) {
-                                        $query->where('venue_tables.id', '=', $tableID)
-                                            ->with(['tableStatus']);
-                                    }
-                                ]);
+                        'venueTableNames' => function($query) use($venueTableNameID){
+                            $query->where('venue_table_names.id','=', $venueTableNameID)->with([
+                                'venueTableRequirements',
+                                'venueTables'
+                            ]);
+                        },
+                        'venueStatus',
+                        'region',
+                        'province',
+                        'cityMunicipality',
+                        'barangay',
+                    ]);
+            },
+            'eventType'
+        ])
+        ->whereHas('venues', function($query) use ($venueID) {
+            $query->where('events_venues.venue_id', '=', $venueID);
+        })
+        ->where('events.id', '=', $eventID)
+        ->first();
+
+
+
+        return response()->json($events, 201);
+
+        }catch(Exception $e){
+            throw $e;
+        }
+    }
+
+    public function showEventVenuesTableNamesTables(string $eventID, string $venueID, string $venueTableNameID){
+
+         try{
+            
+      
+        $events = EventsModel::with([
+            'venues' => function($query) use ($venueID, $venueTableNameID) {
+                $query->where('events_venues.venue_id', '=', $venueID)
+                    ->with([
+                        'venueTableNames' => function($query) use($venueTableNameID){
+                            $query->where('venue_table_names.id','=', $venueTableNameID)->with([
+                                'venueTableRequirements',
+                                'venueTables'
+                            ]);
+                        },
+                        'venueStatus',
+                        'region',
+                        'province',
+                        'cityMunicipality',
+                        'barangay',
+                    ]);
+            },
+            'eventType'
+        ])
+        ->whereHas('venues', function($query) use ($venueID) {
+            $query->where('events_venues.venue_id', '=', $venueID);
+        })
+        ->where('events.id', '=', $eventID)
+        ->first();
+
+
+
+        return response()->json($events, 201);
+
+        }catch(Exception $e){
+            throw $e;
+        }
+
+    }
+
+    public function showEventVenuesTableNamesSpecificTables(string $eventID, string $venueID, string $venueTableNameID, string $venueTableID)
+    {
+
+        
+       
+         try{
+            
+      
+        $events = EventsModel::with([
+            'venues' => function($query) use ($venueID, $venueTableNameID, $venueTableID) {
+                $query->where('events_venues.venue_id', '=', $venueID)
+                    ->with([
+                        'venueTableNames' => function($query) use($venueTableNameID, $venueTableID){
+                            $query->where('venue_table_names.id','=', $venueTableNameID)->with([
+                                'venueTableRequirements',
+                                'venueTables' => function($query) use ($venueTableID){
+                                    $query->where('venue_tables.id','=',$venueTableID);
+                                }
+                            ]);
                         },
                         'venueStatus',
                         'region',

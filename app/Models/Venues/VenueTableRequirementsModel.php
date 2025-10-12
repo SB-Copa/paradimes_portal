@@ -15,11 +15,23 @@ class VenueTableRequirementsModel extends Model
     protected $fillable = [
         'name',
         'description',
-        'venue_table_id',
         'price'
     ];
 
     protected $casts = [
         'price' => 'decimal:2'
     ];
+
+    protected $hidden = ['pivot'];
+
+    public function venueTableNames()
+    {
+        return $this->morphedByMany(
+            VenueTableNamesModel::class,
+            'model',
+            'model_has_venue_table_requirements',
+            'venue_table_requirement_id',
+            'model_id'
+        );
+    }
 }

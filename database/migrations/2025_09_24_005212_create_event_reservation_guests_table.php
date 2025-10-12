@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_registered_guests', function (Blueprint $table) {
+        Schema::create('event_reservation_guests', function (Blueprint $table) {
             $table->id();
             $table->uuid('event_registered_guest_unique_id');
             $table->unsignedBigInteger('event_reservation_ticket_id');
-            $table->unsignedBigInteger('user_id');
+            $table->string('full_name');
+            $table->integer('age');
+            $table->dateTime('entered_datetime');
 
-            $table->foreign('user_id')->references('id')->on('users');
+
             $table->foreign('event_reservation_ticket_id')->references('id')->on('event_reservation_tickets');
             $table->timestamps();
         });
