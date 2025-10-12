@@ -15,7 +15,8 @@ class VenueTableRequirementsModel extends Model
     protected $fillable = [
         'name',
         'description',
-        'price'
+        'price',
+        'capacity'
     ];
 
     protected $casts = [

@@ -90,6 +90,7 @@ class EventsController extends Controller
                 '*.venue_table_names.*.venue_table_requirements' => 'required|array',
                 '*.venue_table_names.*.venue_table_requirements.*.name' => 'required|string',
                 '*.venue_table_names.*.venue_table_requirements.*.price' => 'required|decimal:2',
+                '*.venue_table_names.*.venue_table_requirements.*.capacity' => 'integer|decimal:2',
                 '*.venue_table_names.*.venue_table_requirements.*.description' => 'nullable|decimal:2',
                 
             ]);
@@ -202,7 +203,8 @@ class EventsController extends Controller
                                 $venue_table_requirements = VenueTableRequirementsModel::create([
                                     'name' => $venue_table_requirements_value['name'],
                                     'description' => $venue_table_requirements_value['description'],
-                                    'price' => $venue_table_requirements_value['price']
+                                    'price' => $venue_table_requirements_value['price'],
+                                    'capacity' => $venue_table_requirements_value['capacity'],
                                 ]);
 
                                 ModelHasVenueTableRequirements::create([
