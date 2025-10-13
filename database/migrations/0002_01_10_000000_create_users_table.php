@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('barangay_id');
             $table->string('contact_number');
             $table->date('birthdate');
+            $table->integer('age');
 
 
             $table->string('email')->unique();

@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->uuid('event_reservation_unique_id');
             $table->unsignedBigInteger('event_id');
-            $table->unsignedBigInteger('venue_table_reservation_id');
-            $table->string('description');
+            // $table->unsignedBigInteger('venue_table_reservation_id');
+            $table->string('description')->nullable();
             // $table->unsignedBigInteger('payment_intent_id');
 
 
             $table->foreign('event_id')->references('id')->on('events');
-            $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
+            // $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
             // $table->foreign('promotion_id')->references('id')->on('promotions');
             // $table->foreign('payment_intent_id')->references('id')->on('payment_intents');
             

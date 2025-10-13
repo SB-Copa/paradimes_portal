@@ -92,3 +92,10 @@ Route::get('/admin/regions/{regCode}/provinces/{provCode}/cities-municipalities/
 Route::post('/guest/purchase-ticket',[App\Http\Controllers\PurchaseTickets\Guests\PurchaseTicketsAsGuests::class,'purchaseTicketAsGuest']);
 
 
+/**
+ * 
+ * Get venue reservation
+ * 
+ */
+
+Route::get('/guest/venue/{venueID}',[App\Http\Controllers\PurchaseTickets\Guests\PurchaseTicketsAsGuests::class,'showVenueEventTableReservations']);

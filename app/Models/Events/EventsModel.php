@@ -47,7 +47,7 @@ class EventsModel extends Model
         });
     }
 
-    public function marketingOwnerMarketingCompanies()
+    public function modelHasEvents()
     {
         return $this->morphedByMany(
             MarketingCompaniesMarketingUsersModel::class,
@@ -58,7 +58,7 @@ class EventsModel extends Model
         );
     }
 
-    public function eventReservation(){
+    public function modelHasEventReservations(){
         return $this->morphedByMany(
             EventReservationsModel::class,
             'model',

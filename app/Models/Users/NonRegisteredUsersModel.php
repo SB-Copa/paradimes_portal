@@ -26,5 +26,8 @@ class NonRegisteredUsersModel extends Model
         'contact_number',
         'birthdate',
         'email',
+        'age'
     ];
+
+    
 }

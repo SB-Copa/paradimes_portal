@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('venue_table_reservation_guests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('venue_table_reservation_id');
-            $table->string('full_name');
-            $table->integer('age');
-            $table->dateTime('entered_datetime');
+            $table->string('full_name')->nullable();
+            $table->integer('age')->nullable();
+            $table->dateTime('entered_datetime')->nullable();
             $table->timestamps();
 
             $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('venue_table_registered_guests');
+        Schema::dropIfExists('venue_table_reservation_guests');
     }
 };

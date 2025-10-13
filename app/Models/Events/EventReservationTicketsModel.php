@@ -15,7 +15,7 @@ class EventReservationTicketsModel extends Model
     
     protected $fillable = [
         'event_reservation_id',
-        'event_available_ticket_id',
+        'event_ticket_type_id',
         'quantity',
     ];
 }

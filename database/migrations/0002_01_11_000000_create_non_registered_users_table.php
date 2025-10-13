@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('contact_number')->nullable();
             $table->date('birthdate');
             $table->string('email')->unique();
-
+            $table->integer('age');
 
             $table->foreign('suffix_id')->references('id')->on('suffix');
             $table->foreign('sex_id')->references('id')->on('sex');

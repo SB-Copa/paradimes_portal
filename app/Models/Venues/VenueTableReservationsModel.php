@@ -2,6 +2,7 @@
 
 namespace App\Models\Venues;
 
+use App\Models\Users\NonRegisteredUsersModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -42,13 +43,19 @@ class VenueTableReservationsModel extends Model
         return $this->belongsTo(VenuesModel::class, 'venue_id');
     }
 
-    // public function table()
-    // {
-    //     return $this->belongsTo(SectionModel::class, 'venue_table_id');
-    // }
 
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class, 'user_id');
-    // }
+    public function modelHasVenueTableReservations(){
+        return $this->morphedByMany(
+            NonRegisteredUsersModel::class,
+            'model',
+            'model_has_venue_table_reservations',
+            'venue_table_reservation_id', // venue table reservation id
+            'model_id' // non registered id
+        );
+    }
+
+    public function venueTableReservationGuests(){
+        return $this->hasMany(VenueTableReservationGuestsModel::class,'venue_table_reservation_id','id');
+    }
+
 }

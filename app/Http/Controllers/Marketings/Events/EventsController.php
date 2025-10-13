@@ -549,8 +549,8 @@ class EventsController extends Controller
         try {
       
             $event = EventsModel::with([
-                'marketingOwnerMarketingCompanies.marketingOwner',
-                'eventReservation.users',
+                'modelHasEvents.marketingOwner',
+                'modelHasEventReservations.users',
             ])->get();
 
             return response()->json($event);
