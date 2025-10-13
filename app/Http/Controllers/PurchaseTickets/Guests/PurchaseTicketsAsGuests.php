@@ -226,6 +226,19 @@ class PurchaseTicketsAsGuests extends Controller
                     }
                 ],
                 'events.*.event_tickets.*.quantity' => 'required|integer',
+                'events.*.event_tickets.*.is_primary' => [
+                    'required',
+                    'boolean',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $events = collect($request->input('events'))->some(function ($event) {
+                            return collect($event['venue_table_reservations'])
+                                ->where('is_primary', true)
+                                ->count() > 1;
+                        });
+
+                        dd($events);
+                    }
+                ],
                 'events.*.event_tickets.*.guests' => [
                     'nullable',
                     'array',
@@ -548,11 +561,14 @@ class PurchaseTicketsAsGuests extends Controller
                                     ]);
 
                                     // Reservation ticket
-                                    $eventReservationTicket = EventReservationTicketsModel::create([
-                                        'event_reservation_id' => $eventReservation['id'],
-                                        'event_ticket_type_id' => $event_ticket_value['event_ticket_type_id'],
-                                        'quantity' => $event_ticket_value['quantity'],
-                                    ]);
+                                    $counter = 1;
+                                    while ($counter <= $event_ticket_value['quantity']) {
+                                        $eventReservationTicket = EventReservationTicketsModel::create([
+                                            'event_reservation_id' => $eventReservation['id'],
+                                            'event_ticket_type_id' => $event_ticket_value['event_ticket_type_id'],
+                                        ]);
+                                    }
+
 
                                     // Add ticket guests
                                     if (!empty($event_ticket_value['guests'])) {
@@ -623,14 +639,13 @@ class PurchaseTicketsAsGuests extends Controller
     public function showVenueEventTableReservations(string $venueID)
     {
 
-        $venue =  VenuesModel::
-        join('events_venues','venues.id','=','events_venues.venue_id')
-        ->with([
-            'venueTableReservations.modelHasVenueTableReservations',
-            'venueTableReservations.venueTableReservationGuests'
-        ])
-        ->where('venues.id', '=', $venueID)
-        ->get();
+        $venue =  VenuesModel::join('events_venues', 'venues.id', '=', 'events_venues.venue_id')
+            ->with([
+                'venueTableReservations.modelHasVenueTableReservations',
+                'venueTableReservations.venueTableReservationGuests'
+            ])
+            ->where('venues.id', '=', $venueID)
+            ->get();
 
         return response()->json($venue, 200);
     }
