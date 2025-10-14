@@ -544,13 +544,15 @@ class EventsController extends Controller
     }
     
 
-    public function deleteSpecificEvent($id)
+    public function deleteSpecificEvent($eventID)
     {
         try {
-      
+           
             $event = EventsModel::with([
                 'modelHasEvents.marketingOwner',
-                'modelHasEventReservations.users',
+                'eventReservations.eventReservationTickets.eventReservationTicketGuests',
+                'venues.venueTableReservations.user',
+                'venues.venueTableReservations.venueTableReservationGuests'
             ])->get();
 
             return response()->json($event);

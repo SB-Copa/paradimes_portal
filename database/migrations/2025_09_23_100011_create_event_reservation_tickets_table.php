@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('event_reservation_id');
             $table->unsignedBigInteger('event_ticket_type_id');
+            $table->uuid('event_reservation_ticket_unique_key')->unique();
             // $table->integer('quantity');
 
             $table->foreign('event_reservation_id')->references('id')->on('event_reservations');

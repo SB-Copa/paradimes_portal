@@ -8,6 +8,7 @@ use App\Models\Events\EventRegisteredGuestsModel;
 use App\Models\Events\EventReservationsModel;
 use App\Models\Events\EventReservationTicketGuests;
 use App\Models\Events\EventReservationTicketsModel;
+use App\Models\Events\EventsModel;
 use App\Models\Events\EventsVenuesModel;
 use App\Models\Events\EventTicketTypesModel;
 use App\Models\Events\ModelHasEventReservationModel;
@@ -140,6 +141,27 @@ class PurchaseTicketsAsGuests extends Controller
                     }
                 ],
                 'events.*.venue_table_reservations.*.description' => 'nullable|string',
+                'events.*.venue_table_reservations.*.is_primary' => [
+                    'required',
+                    'boolean',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $venues = collect($request->input('events'))->some(function ($event) {
+                            return collect($event['venue_table_reservations'])
+                                ->where('is_primary', true)
+                                ->count() > 1;
+                        });
+
+                        $events = collect($request->input('events'))->some(function ($event) {
+                            return collect($event['event_tickets'])
+                                ->where('is_primary', true)
+                                ->count() > 1;
+                        });
+
+                        if ($events || $venues) {
+                            $fail('There should be only one is_primary');
+                        }
+                    }
+                ],
                 'events.*.venue_table_reservations.*.guests' => [
                     'nullable',
                     'array',
@@ -152,7 +174,7 @@ class PurchaseTicketsAsGuests extends Controller
 
 
                             $venueTableID =  $request->input("events.{$index}.venue_table_reservations.{$index2}.venue_table_id");
-
+                            $isPrimary =  $request->input("events.{$index}.venue_table_reservations.{$index2}.is_primary");
                             $venueTable = VenueTablesModel::find($venueTableID);
 
                             $totalCapacity = $venueTable['capacity'];
@@ -163,6 +185,8 @@ class PurchaseTicketsAsGuests extends Controller
                                 $fail('The guests must not be greater than or equal the quantity.');
                             } else if (($totalCapacity <= 0 && count($value)) > 0) {
                                 $fail('Capacity error');
+                            } else if ($isPrimary && count($value) >= $totalCapacity - 1) {
+                                $fail('Guest must be -1 if primary is included');
                             }
                         }
                     }
@@ -194,7 +218,7 @@ class PurchaseTicketsAsGuests extends Controller
                         $index = $matches[1] ?? 0;
                         $index2 = $matches[2] ?? 0;
 
-                        $eventID = $request->input("events.{$index}.event_tickets.{$index2}.event_id");
+                        $eventID = $request->input("events.{$index}.event_id");
 
                         $eventTicketTypes = EventTicketTypesModel::where('id', '=', $value)->where('event_id', '=', $eventID)->exists();
 
@@ -202,10 +226,6 @@ class PurchaseTicketsAsGuests extends Controller
                             $fail('Event ticket type does not exists');
                         }
                     }
-                ],
-                'events.*.event_tickets.*.event_id' => [
-                    'required',
-                    'exists:events,id'
                 ],
                 'events.*.event_tickets.*.venue_id' => [
                     'required',
@@ -216,7 +236,7 @@ class PurchaseTicketsAsGuests extends Controller
                         $index = $matches[1] ?? 0;
                         $index2 = $matches[2] ?? 0;
 
-                        $eventID = $request->input("events.{$index}.event_tickets.{$index2}.event_id");
+                        $eventID = $request->input("events.{$index}.event_id");
 
                         $eventsVenues = EventsVenuesModel::where('venue_id', '=', $value)->where('event_id', '=', $eventID)->exists();
 
@@ -230,13 +250,21 @@ class PurchaseTicketsAsGuests extends Controller
                     'required',
                     'boolean',
                     function ($attribute, $value, $fail) use ($request) {
-                        $events = collect($request->input('events'))->some(function ($event) {
+                        $venues = collect($request->input('events'))->some(function ($event) {
                             return collect($event['venue_table_reservations'])
                                 ->where('is_primary', true)
                                 ->count() > 1;
                         });
 
-                        dd($events);
+                        $events = collect($request->input('events'))->some(function ($event) {
+                            return collect($event['event_tickets'])
+                                ->where('is_primary', true)
+                                ->count() > 1;
+                        });
+
+                        if ($events || $venues) {
+                            $fail('There should be only one is_primary');
+                        }
                     }
                 ],
                 'events.*.event_tickets.*.guests' => [
@@ -252,7 +280,8 @@ class PurchaseTicketsAsGuests extends Controller
 
                         $ticketQuantity = $request->input("events.{$index}.event_tickets.{$index2}.quantity");
                         $ticketTypeID = $request->input("events.{$index}.event_tickets.{$index2}.event_ticket_type_id");
-                        $eventID = $request->input("events.{$index}.event_tickets.{$index2}.event_id");
+                        $eventID = $request->input("events.{$index}.event_id");
+                        $isPrimary = $request->input("events.{$index}.event_tickets.{$index2}.is_primary");
 
                         $eventTicketType = EventTicketTypesModel::where('event_id', '=', $eventID)->where('id', '=', $ticketTypeID)->first();
 
@@ -260,8 +289,10 @@ class PurchaseTicketsAsGuests extends Controller
                             $fail('Guest must be less than the ticket quantity.');
                         } else if (!$eventTicketType) {
                             $fail('Ticket type does not exist on this event.');
-                        } else if ($ticketQuantity > $eventTicketType->available_tickets) {
+                        } else if ($ticketQuantity > $eventTicketType['available_tickets']) {
                             $fail('Ticket quantity is greater than the available ticket.');
+                        } else if ($isPrimary && count($value) >= $ticketQuantity) {
+                            $fail('Guest must be -1 if primary is included');
                         }
                     }
                 ],
@@ -300,26 +331,6 @@ class PurchaseTicketsAsGuests extends Controller
                  */
 
                 if (isset($guest_data['events'])) {
-
-                    $nonRegisteredUsers = NonRegisteredUsersModel::firstOrCreate(
-                        [
-                            'first_name' => $guest_data['first_name'],
-                            'middle_name' => $guest_data['middle_name'] ?? null,
-                            'last_name' => $guest_data['last_name'],
-                            'suffix_id' => $guest_data['suffix_id'],
-                            'birthdate' => $guest_data['birthdate']
-                        ],
-                        [
-                            'first_name' => $guest_data['first_name'],
-                            'middle_name' => $guest_data['middle_name'] ?? null,
-                            'last_name' => $guest_data['last_name'],
-                            'suffix_id' => $guest_data['suffix_id'],
-                            'birthdate' => $guest_data['birthdate'],
-                            'sex_id' => $guest_data['sex_id'],
-                            'email' => $guest_data['email'],
-                            'age' => $guest_data['age']
-                        ]
-                    );
 
 
 
@@ -474,6 +485,28 @@ class PurchaseTicketsAsGuests extends Controller
                         try {
                             DB::beginTransaction();
 
+                            $nonRegisteredUsers = NonRegisteredUsersModel::firstOrCreate(
+                                [
+                                    'first_name' => $guest_data['first_name'],
+                                    'middle_name' => $guest_data['middle_name'] ?? null,
+                                    'last_name' => $guest_data['last_name'],
+                                    'suffix_id' => $guest_data['suffix_id'],
+                                    'birthdate' => $guest_data['birthdate']
+                                ],
+                                [
+                                    'first_name' => $guest_data['first_name'],
+                                    'middle_name' => $guest_data['middle_name'] ?? null,
+                                    'last_name' => $guest_data['last_name'],
+                                    'suffix_id' => $guest_data['suffix_id'],
+                                    'birthdate' => $guest_data['birthdate'],
+                                    'sex_id' => $guest_data['sex_id'],
+                                    'email' => $guest_data['email'],
+                                    'age' => $guest_data['age']
+                                ]
+                            );
+
+
+
                             foreach ($guest_data['events'] as $event_key => $event_value) {
 
                                 /**
@@ -504,14 +537,17 @@ class PurchaseTicketsAsGuests extends Controller
                                             'venue_id' => $venue_table_reservations_value['venue_id'],
                                             'venue_table_holder_type_id' => $venue_table_reservations_value['venue_table_holder_type_id'],
                                             'description' => $venue_table_reservations_value['description'] ?? null,
+                                            'model_type' => get_class($nonRegisteredUsers),
+                                            'model_id' => $nonRegisteredUsers->id,
+                                            'is_primary' => $venue_table_reservations_value['is_primary']
                                         ]
                                     );
 
-                                    ModelHasVenueTableReservations::create([
-                                        'model_type' => get_class($nonRegisteredUsers),
-                                        'model_id' => $nonRegisteredUsers->id,
-                                        'venue_table_reservation_id' => $venueTableReservations['id'],
-                                    ]);
+                                    // ModelHasVenueTableReservations::create([
+                                    //     'model_type' => get_class($nonRegisteredUsers),
+                                    //     'model_id' => $nonRegisteredUsers->id,
+                                    //     'venue_table_reservation_id' => $venueTableReservations['id'],
+                                    // ]);
 
                                     // Create guests
                                     if (!empty($venue_table_reservations_value['guests'])) {
@@ -531,7 +567,7 @@ class PurchaseTicketsAsGuests extends Controller
                                  */
                                 foreach ($event_value['event_tickets'] as $event_ticket_value) {
 
-                                    $eventTicketType = EventTicketTypesModel::where('event_id', $event_ticket_value['event_id'])
+                                    $eventTicketType = EventTicketTypesModel::where('event_id', $event_value['event_id'])
                                         ->where('id', $event_ticket_value['event_ticket_type_id'])
                                         ->lockForUpdate()
                                         ->first();
@@ -551,38 +587,57 @@ class PurchaseTicketsAsGuests extends Controller
 
                                     // Create event reservation
                                     $eventReservation = EventReservationsModel::create([
-                                        'event_id' => $event_ticket_value['event_id'],
-                                    ]);
-
-                                    ModelHasEventReservationsModel::create([
+                                        'event_id' => $event_value['event_id'],
                                         'model_type' => get_class($nonRegisteredUsers),
                                         'model_id' => $nonRegisteredUsers->id,
-                                        'event_reservation_id' => $eventReservation['id'],
+                                        'is_primary' => $event_ticket_value['is_primary']
                                     ]);
 
+                                    // ModelHasEventReservationsModel::create([
+                                    //     'model_type' => get_class($nonRegisteredUsers),
+                                    //     'model_id' => $nonRegisteredUsers->id,
+                                    //     'event_reservation_id' => $eventReservation['id'],
+                                    // ]);
+
                                     // Reservation ticket
-                                    $counter = 1;
-                                    while ($counter <= $event_ticket_value['quantity']) {
+
+                                    $eventTicketCounter = 1;
+                                    $eventReservationTicketID = [];
+
+                                    while ($eventTicketCounter <= $event_ticket_value['quantity']) {
                                         $eventReservationTicket = EventReservationTicketsModel::create([
                                             'event_reservation_id' => $eventReservation['id'],
                                             'event_ticket_type_id' => $event_ticket_value['event_ticket_type_id'],
                                         ]);
+                                        $eventReservationTicketID[] = $eventReservationTicket['id'];
+                                        $eventTicketCounter++;
                                     }
 
 
                                     // Add ticket guests
+
                                     if (!empty($event_ticket_value['guests'])) {
-                                        foreach ($event_ticket_value['guests'] as $guest) {
+
+                                        $eventReservationCounter = 0;
+
+                                        foreach ($event_ticket_value['guests'] as $guest_key => $guest_value) {
+
+                                            if (($event_ticket_value['is_primary'] == true) && ($eventReservationCounter + 1 >= $event_ticket_value['quantity'])) {
+                                                break;
+                                            }
+
                                             EventReservationTicketGuests::create([
-                                                'full_name' => $guest['full_name'],
-                                                'age' => $guest['age'],
-                                                'event_reservation_ticket_id' => $eventReservationTicket['id'],
+                                                'full_name' => $guest_value['full_name'],
+                                                'age' => $guest_value['age'],
+                                                'event_reservation_ticket_id' => $eventReservationTicketID[$eventReservationCounter],
                                             ]);
+
+                                            $eventReservationCounter++;
                                         }
                                     }
                                 }
                             }
-
+           
                             /**
                              * 💳 Payment Gateway should happen OUTSIDE the lock!
                              * Save payment intent / token only here if needed.
@@ -636,16 +691,17 @@ class PurchaseTicketsAsGuests extends Controller
         }
     }
 
-    public function showVenueEventTableReservations(string $venueID)
+    public function showVenueEventTableReservations(string $eventID)
     {
 
-        $venue =  VenuesModel::join('events_venues', 'venues.id', '=', 'events_venues.venue_id')
+        $venue =  EventsModel::join('events_venues', 'events.id', '=', 'events_venues.event_id')
             ->with([
-                'venueTableReservations.modelHasVenueTableReservations',
-                'venueTableReservations.venueTableReservationGuests'
+                'venues.venueTableReservations.user',
+                'eventReservations.user',
+                'eventReservations.eventReservationTickets.eventReservationTicketGuests'
             ])
-            ->where('venues.id', '=', $venueID)
-            ->get();
+            ->where('events.id', '=', $eventID)
+            ->first();
 
         return response()->json($venue, 200);
     }

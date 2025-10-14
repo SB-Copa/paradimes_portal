@@ -16,14 +16,16 @@ return new class extends Migration
             $table->uuid('venue_tables_reservation_unique_id');
             $table->unsignedBigInteger('venue_table_id');
             $table->unsignedBigInteger('venue_id');
+            $table->unsignedBigInteger('venue_table_holder_type_id');
+            $table->boolean('is_primary');
+            $table->morphs('model');
             // $table->unsignedBigInteger('user_id');
             // $table->unsignedBigInteger('non_registered_user_id');
-            $table->unsignedBigInteger('venue_table_holder_type_id');
 
             $table->foreign('venue_table_id')->references('id')->on('venue_tables');
             $table->foreign('venue_id')->references('id')->on('venues');
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('venue_table_holder_type_id')->references('id')->on('venue_table_holder_types');
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             // $table->foreign('non_registered_user_id')->references('id')->on('non_registered_users');
             
             $table->timestamps();

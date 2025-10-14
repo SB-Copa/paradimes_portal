@@ -20,6 +20,11 @@ class EventReservationsModel extends Model
         'event_reservation_unique_id',
         'event_id',
         'description',
+        'quantity',
+        'total_amount',
+        'model_type',
+        'model_id',
+        'is_primary'
         // 'venue_table_reservation_id'
         // 'user_id',
         // 'user_type',
@@ -42,7 +47,11 @@ class EventReservationsModel extends Model
         });
     }
 
-    public function users(){
-        return $this->morphTo();
+    public function user(){
+        return $this->morphTo('user','model_type','model_id');
+    }
+
+    public function eventReservationTickets(){
+        return $this->hasMany(EventReservationTicketsModel::class,'event_reservation_id','id');
     }
 }

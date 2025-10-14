@@ -58,16 +58,16 @@ class EventsModel extends Model
         );
     }
 
-    public function modelHasEventReservations(){
-        return $this->morphedByMany(
-            EventReservationsModel::class,
-            'model',
-            'model_has_event_reservations',
-            'event_reservation_id',
-            'model_id'
-        );
+    // public function modelHasEventReservations(){
+    //     return $this->morphedByMany(
+    //         EventReservationsModel::class,
+    //         'model',
+    //         'model_has_event_reservations',
+    //         'event_reservation_id',
+    //         'model_id'
+    //     );
 
-    }
+    // }
 
     public function venues(){
         return $this->belongsToMany(VenuesModel::class,'events_venues','event_id','venue_id');
@@ -79,6 +79,10 @@ class EventsModel extends Model
 
     public function eventTicketTypes(){
         return $this->hasMany(EventTicketTypesModel::class,'event_id','id');
+    }
+
+    public function eventReservations(){
+        return $this->hasMany(EventReservationsModel::class,'event_id','id');
     }
 
 }

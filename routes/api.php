@@ -98,4 +98,4 @@ Route::post('/guest/purchase-ticket',[App\Http\Controllers\PurchaseTickets\Guest
  * 
  */
 
-Route::get('/guest/venue/{venueID}',[App\Http\Controllers\PurchaseTickets\Guests\PurchaseTicketsAsGuests::class,'showVenueEventTableReservations']);
+Route::get('/guest/event/{eventID}',[App\Http\Controllers\PurchaseTickets\Guests\PurchaseTicketsAsGuests::class,'showVenueEventTableReservations']);

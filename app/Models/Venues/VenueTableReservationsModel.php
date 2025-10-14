@@ -19,6 +19,9 @@ class VenueTableReservationsModel extends Model
         'venue_table_id',
         'venue_id',
         'venue_table_holder_type_id',
+        'model_type',
+        'is_primary',
+        'model_id'
     ];
 
     protected $casts = [
@@ -43,16 +46,10 @@ class VenueTableReservationsModel extends Model
         return $this->belongsTo(VenuesModel::class, 'venue_id');
     }
 
-
-    public function modelHasVenueTableReservations(){
-        return $this->morphedByMany(
-            NonRegisteredUsersModel::class,
-            'model',
-            'model_has_venue_table_reservations',
-            'venue_table_reservation_id', // venue table reservation id
-            'model_id' // non registered id
-        );
+    public function user(){
+         return $this->morphTo('user', 'model_type', 'model_id');
     }
+
 
     public function venueTableReservationGuests(){
         return $this->hasMany(VenueTableReservationGuestsModel::class,'venue_table_reservation_id','id');
