@@ -20,7 +20,7 @@ return new class extends Migration
             $table->dateTime('entered_datetime')->nullable();
 
 
-            $table->foreign('event_reservation_ticket_id')->references('id')->on('event_reservation_tickets');
+            $table->foreign('event_reservation_ticket_id')->references('id')->on('event_reservation_tickets')->delete('cascade');
             $table->timestamps();
         });
     }

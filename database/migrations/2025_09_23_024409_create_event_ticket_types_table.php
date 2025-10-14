@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('price');
             $table->unsignedBigInteger('available_tickets');
 
-            $table->foreign('event_id')->references('id')->on('events');
+            $table->foreign('event_id')->references('id')->on('events')->delete('cascade');
 
             $table->timestamps();
         });

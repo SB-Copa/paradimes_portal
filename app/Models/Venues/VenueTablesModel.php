@@ -33,7 +33,7 @@ class VenueTablesModel extends Model
         return $this->belongsTo(VenueTableStatusesModel::class, 'venue_table_status_id', 'id');
     }
 
-    public function tableRequirements()
+    public function venueTableRequirements()
     {
         return $this->morphMany(VenueTableRequirementsModel::class, 'model');
     }
