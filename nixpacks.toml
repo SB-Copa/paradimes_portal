@@ -7,7 +7,10 @@ cmds = [
     "cp /assets/worker-*.conf /etc/supervisor/conf.d/",
     "cp /assets/supervisord.conf /etc/supervisord.conf",
     "chmod +x /assets/start.sh",
-    "..."
+    # 👇 add this near the end of build
+    "php artisan optimize:clear",
+    "chmod -R 775 storage bootstrap/cache",
+    "chown -R www-data:www-data storage bootstrap/cache"
 ]
 
 [start]
