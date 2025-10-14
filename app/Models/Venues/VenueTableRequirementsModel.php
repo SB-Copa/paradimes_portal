@@ -16,7 +16,9 @@ class VenueTableRequirementsModel extends Model
         'name',
         'description',
         'price',
-        'capacity'
+        'capacity',
+        'model_type',
+        'model_id'
     ];
 
     protected $casts = [
@@ -25,14 +27,8 @@ class VenueTableRequirementsModel extends Model
 
     // protected $hidden = ['pivot'];
 
-    public function venueTableNames()
+    public function model()
     {
-        return $this->morphedByMany(
-            VenueTableNamesModel::class,
-            'model',
-            'model_has_venue_table_requirements',
-            'venue_table_requirement_id', // referes to the venue table requirement
-            'model_id' // refers to the  venue table name
-        );
+        return $this->morphTo();
     }
 }

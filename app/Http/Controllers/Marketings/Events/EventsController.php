@@ -8,6 +8,7 @@ use App\Models\Events\EventsVenuesModel;
 use App\Models\Events\EventTicketTypesModel;
 use App\Models\Events\EventTypesModel;
 use App\Models\Events\ModelHasEvents;
+use App\Models\Marketings\MarketingUsersModel;
 use App\Models\Venues\ModelHasTableRequirements;
 use App\Models\Venues\ModelHasVenueTableRequirements;
 use App\Models\Venues\ModelHasVenueTables;
@@ -203,15 +204,13 @@ class EventsController extends Controller
                             $venue_table_requirements = VenueTableRequirementsModel::create([
                                 'name' => $venue_table_requirements_value['name'],
                                 'description' => $venue_table_requirements_value['description'],
+                                'model_type' => get_class($venue_table_name),
+                                'model_id' => $venue_table_name->id,
                                 'price' => $venue_table_requirements_value['price'],
                                 'capacity' => $venue_table_requirements_value['capacity'],
                             ]);
 
-                            ModelHasVenueTableRequirements::create([
-                                'model_type' => get_class($venue_table_name),
-                                'model_id' => $venue_table_name->id,
-                                'venue_table_requirement_id' => $venue_table_requirements->id
-                            ]);
+                         
                         }
                     }
 
@@ -228,7 +227,7 @@ class EventsController extends Controller
 
 
                         $modelHasVenueTables = ModelHasVenueTables::firstOrCreate([
-                            'model_type' => 'App\Models\Auth\UserModel',
+                            'model_type' => 'App\Models\Marketings\MarketingUsersModel',
                             'model_id' => '1',
                             'venue_table_id' => $venueTables->id,
                         ]);
@@ -370,7 +369,7 @@ class EventsController extends Controller
             $modelHasEvents = ModelHasEvents::create([
                 // 'model_type' => get_class(Auth::user()),
                 // 'model_id' => Auth::user()->id,
-                'model_type' => 'App\Models\Marketings\MarketingCompaniesMarketingUsersModel',
+                'model_type' => 'App\Models\Marketings\MarketingUsersModel',
                 'model_id' => 1,
                 'event_id' => $event->id
             ]);
@@ -547,15 +546,17 @@ class EventsController extends Controller
     public function deleteSpecificEvent($eventID)
     {
         try {
-           
-            $event = EventsModel::with([
-                'modelHasEvents.marketingOwner',
-                'eventReservations.eventReservationTickets.eventReservationTicketGuests',
-                'venues.venueTableReservations.user',
-                'venues.venueTableReservations.venueTableReservationGuests'
-            ])->get();
+          
+            $marketingUsers = MarketingUsersModel::with([
+                // 'modelHasEvents.eventReservations.morphToUser',
+                // 'modelHasEvents.eventReservations.eventReservationTickets.eventReservationTicketGuests',
+                //venues
+                'modelHasTableNames',
 
-            return response()->json($event);
+            ])
+            ->get();
+           
+            return response()->json($marketingUsers);
             
             if (!$event) {
                 return response()->json([

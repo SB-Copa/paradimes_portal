@@ -47,7 +47,7 @@ class EventReservationsModel extends Model
         });
     }
 
-    public function user(){
+    public function morphToUser(){
         return $this->morphTo('user','model_type','model_id');
     }
 

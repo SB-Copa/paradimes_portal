@@ -19,7 +19,6 @@ class ModelHasEvents extends Model
     ];
 
     public function events(){
-
         return $this->morphTo();
     }
 }

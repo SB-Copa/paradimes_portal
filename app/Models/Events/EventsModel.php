@@ -3,6 +3,7 @@
 namespace App\Models\Events;
 
 use App\Models\Marketings\MarketingCompaniesMarketingUsersModel;
+use App\Models\Marketings\MarketingUsersModel;
 use App\Models\Venues\VenuesModel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -50,7 +51,7 @@ class EventsModel extends Model
     public function modelHasEvents()
     {
         return $this->morphedByMany(
-            MarketingCompaniesMarketingUsersModel::class,
+            MarketingUsersModel::class,
             'model', // Class: Event
             'model_has_events',
             'event_id', // Event: 1 // Foreign key on pivot that refers to the Event

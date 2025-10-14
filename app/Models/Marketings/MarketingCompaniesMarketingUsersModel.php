@@ -2,6 +2,7 @@
 
 namespace App\Models\Marketings;
 
+use App\Models\Events\EventsModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,10 @@ class MarketingCompaniesMarketingUsersModel extends Model
     ];
 
 
-    public function marketingOwner(){
-        return $this->belongsTo(MarketingUsersModel::class,'marketing_user_id','id');
+    public function marketingOwner()
+    {
+        return $this->belongsTo(MarketingUsersModel::class, 'marketing_user_id', 'id');
     }
+
+ 
 }

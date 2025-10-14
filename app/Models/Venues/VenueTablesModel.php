@@ -2,6 +2,7 @@
 
 namespace App\Models\Venues;
 
+use App\Models\Marketings\MarketingUsersModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,15 +23,30 @@ class VenueTablesModel extends Model
         'legend'
     ];
 
-    public function venue(){
-        return $this->belongsTo(VenuesModel::class,'venue_id','id');
+    public function venue()
+    {
+        return $this->belongsTo(VenuesModel::class, 'venue_id', 'id');
     }
 
-    public function tableStatus(){
-        return $this->belongsTo(VenueTableStatusesModel::class,'venue_table_status_id','id');
+    public function tableStatus()
+    {
+        return $this->belongsTo(VenueTableStatusesModel::class, 'venue_table_status_id', 'id');
     }
 
-    public function tableRequirements(){
-        return $this->hasMany(VenueTableRequirementsModel::class,'venue_table_id','id');
+    public function tableRequirements()
+    {
+        return $this->morphMany(VenueTableRequirementsModel::class, 'model');
+    }
+
+
+    public function marketingUser()
+    {
+        return $this->morphedByMany(
+            MarketingUsersModel::class,
+            'model',
+            'model_has_event_reservations',
+            'event_reservation_id',
+            'model_id'
+        );
     }
 }
