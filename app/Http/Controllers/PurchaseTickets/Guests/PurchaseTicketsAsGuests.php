@@ -512,6 +512,8 @@ class PurchaseTicketsAsGuests extends Controller
                                 /**
                                  * VENUE TABLE RESERVATIONS
                                  */
+
+                               
                                 foreach ($event_value['venue_table_reservations'] as $venue_table_reservations_value) {
 
                                     // Lock the specific venue table row
@@ -534,7 +536,7 @@ class PurchaseTicketsAsGuests extends Controller
                                         ],
                                         [
                                             'venue_table_id' => $venue_table_reservations_value['venue_table_id'],
-                                            'venue_id' => $event_value['venue_id'],
+                                            'venue_id' => $venue_table_reservations_value['venue_id'],
                                             'venue_table_holder_type_id' => $venue_table_reservations_value['venue_table_holder_type_id'],
                                             'description' => $venue_table_reservations_value['description'] ?? null,
                                             'model_type' => get_class($nonRegisteredUsers),
