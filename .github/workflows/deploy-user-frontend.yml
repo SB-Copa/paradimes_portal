@@ -34,14 +34,14 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         working-directory: ./user-frontend
         run: |
-          DEPLOYMENT_URL=$(vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }})
+          DEPLOYMENT_URL=$(vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --yes)
           echo "Deployed to: $DEPLOYMENT_URL"
 
       - name: Deploy to Vercel (Preview)
         if: github.event_name == 'pull_request'
         working-directory: ./user-frontend
         run: |
-          DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }})
+          DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes)
           echo "Preview URL: $DEPLOYMENT_URL"
           echo "deployment_url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
         id: preview_deploy
