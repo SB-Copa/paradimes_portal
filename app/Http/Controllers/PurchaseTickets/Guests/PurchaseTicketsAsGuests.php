@@ -167,7 +167,7 @@ class PurchaseTicketsAsGuests extends Controller
                     'nullable',
                     'array',
                     function ($attribute, $value, $fail) use ($request) {
-                         
+                        
                         if (isset($value)) {
                             preg_match('/events\.(\d+)\.venue_table_reservations\.(\d+)\./', $attribute, $matches);
                             $index = $matches[1] ?? 0;
