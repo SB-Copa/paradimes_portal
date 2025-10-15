@@ -311,13 +311,13 @@ export default function SelectTables() {
                   }}
                   onClick={() => !isDrawMode && handleSeatClick(seat.id)}
                 >
+                  
                   {/* Seat label */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-xs font-bold text-white drop-shadow-lg bg-black/40 bg-opacity-50 px-2 py-1 rounded">
                       {seat.name}
                     </span>
                   </div>
-
                   {/* Remove button - always visible in draw mode, visible on hover in select mode */}
                   {/* {(isDrawMode || isHovered) && (
                     <button
