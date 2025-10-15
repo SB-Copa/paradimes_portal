@@ -11,7 +11,6 @@ export default function Payment() {
     const { getValues } = useFormContext()
 
 
-
     const handleCheckout = async () => {
         const values = getValues()
         const { tickets, tables, ...formValues } = values;
