@@ -22,6 +22,7 @@ use App\Models\Venues\VenueTableNamesModel;
 use App\Models\Venues\VenueTableReservationGuestsModel;
 use App\Models\Venues\VenueTableReservationsModel;
 use App\Models\Venues\VenueTablesModel;
+use Carbon\Carbon;
 use Database\Factories\Models\Venues\VenueTableNonRegisteredGuestsModelFactory;
 use Exception;
 use Illuminate\Http\Request;
@@ -51,7 +52,7 @@ class PurchaseTicketsAsGuests extends Controller
                     'regex:/^(?:\+639|639|09)\d{9}$/'
                 ],
                 'birthdate' => 'required|date',
-                'age' => 'required|integer',
+                'age' => 'nullable|integer',
                 'email' => 'required|email',
                 'events.*.event_id' => 'required|exists:events,id',
                 'events.*.venue_table_reservations' => [
@@ -485,6 +486,8 @@ class PurchaseTicketsAsGuests extends Controller
                         try {
                             DB::beginTransaction();
 
+                            
+
                             $nonRegisteredUsers = NonRegisteredUsersModel::firstOrCreate(
                                 [
                                     'first_name' => $guest_data['first_name'],
@@ -501,7 +504,7 @@ class PurchaseTicketsAsGuests extends Controller
                                     'birthdate' => $guest_data['birthdate'],
                                     'sex_id' => $guest_data['sex_id'],
                                     'email' => $guest_data['email'],
-                                    'age' => $guest_data['age']
+                                    'age' =>  Carbon::parse($guest_data['age'])->age
                                 ]
                             );
 
