@@ -3,12 +3,12 @@ name: Deploy to Vercel
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - 'user-frontend/**'
   pull_request:
     branches:
-      - main
+      - master
     paths:
       - 'user-frontend/**'
 
