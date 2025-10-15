@@ -29,7 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Session\Middleware\StartSession::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,// Needed for cookie-based authentication
             // \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class, // except login etc
-             \App\Http\Middleware\VerifyCsrfToken::class,
+            //  \App\Http\Middleware\VerifyCsrfToken::class,
             // \App\Http\Middleware\VerifyCSRFToken::class,
             // \App\Http\Middleware\RefreshSanctumToken::class, //refresh the session because auth sanctum does not automatically reset the session unlike web (to refresh not to logout)
             // 'throttle:api',
