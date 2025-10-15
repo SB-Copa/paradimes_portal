@@ -318,6 +318,7 @@ export default function SelectTables() {
                     </span>
                   </div>
 
+
                   {/* Remove button - always visible in draw mode, visible on hover in select mode */}
                   {/* {(isDrawMode || isHovered) && (
                     <button
