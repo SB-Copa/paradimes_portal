@@ -30,14 +30,30 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
-      - name: Pull Vercel Environment Information
+      - name: Deploy to Vercel (Production)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         working-directory: ./user-frontend
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          DEPLOYMENT_URL=$(vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --yes)
+          echo "Deployed to: $DEPLOYMENT_URL"
 
-      - name: Build Project Artifacts
+      - name: Deploy to Vercel (Preview)
+        if: github.event_name == 'pull_request'
         working-directory: ./user-frontend
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes)
+          echo "Preview URL: $DEPLOYMENT_URL"
+          echo "deployment_url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+        id: preview_deploy
 
-      - name: Deploy Project Artifacts to Vercel
-        working-directory: ./user-frontend
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Comment Preview URL on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🚀 Preview Deployment Ready!\n\n✅ Your preview deployment is ready:\n\n🔗 **Preview URL:** ${{ steps.preview_deploy.outputs.deployment_url }}\n\n---\n*This preview will be automatically updated with new commits.*`
+            })
