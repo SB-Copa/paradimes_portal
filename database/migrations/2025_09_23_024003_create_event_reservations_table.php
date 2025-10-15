@@ -24,7 +24,7 @@ return new class extends Migration
             // $table->unsignedBigInteger('venue_table_reservation_id');
 
 
-            $table->foreign('event_id')->references('id')->on('events')->delete('cascade');
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             // $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
             // $table->foreign('promotion_id')->references('id')->on('promotions');
             // $table->foreign('payment_intent_id')->references('id')->on('payment_intents');

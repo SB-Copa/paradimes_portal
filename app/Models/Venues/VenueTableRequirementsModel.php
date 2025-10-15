@@ -27,8 +27,10 @@ class VenueTableRequirementsModel extends Model
 
     // protected $hidden = ['pivot'];
 
-    public function model()
+    public function requirements()
     {
-        return $this->morphTo();
+        return $this->morphTo(__FUNCTION__,'model_type','model_id');
     }
+
+
 }

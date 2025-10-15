@@ -16,15 +16,5 @@ class EventsVenuesModel extends Model
         'venue_id'
     ];
 
-    protected static function booted()
-    {
-        static::deleted(function ($pivot) {
-            // When a pivot record is deleted
-            $event = VenuesModel::find($pivot->venue_id);
-
-            // if ($event && $event->venues()->count() === 0) {
-            //     $event->delete(); // delete parent if no venues left
-            // }
-        });
-    }
+    
 }

@@ -37,7 +37,7 @@ Route::delete('/admin/event-types/{eventTypeID}/delete',[App\Http\Controllers\Ma
 Route::get('/admin/events',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEvents']);
 Route::get('/admin/events/{eventID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showSpecificEvent']);
 Route::patch('/admin/events/{eventID}/update',[App\Http\Controllers\Marketings\Events\EventsController::class,'updateSpecificEvent']);
-Route::get('/admin/events/{eventID}/delete',[App\Http\Controllers\Marketings\Events\EventsController::class,'deleteSpecificEvent']);
+Route::delete('/admin/events/{eventID}/delete',[App\Http\Controllers\Marketings\Events\EventsController::class,'deleteSpecificEvent']);
 
 Route::get('/admin/events/{eventID}/venues',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventVenues']);
 Route::get('/admin/events/{eventID}/venues/{venueID}',[App\Http\Controllers\Marketings\Events\EventsController::class,'showEventSpecificVenue']);

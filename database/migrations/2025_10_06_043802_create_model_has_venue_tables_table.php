@@ -16,7 +16,7 @@ return new class extends Migration
             $table->morphs('model');
             $table->unsignedBigInteger('venue_table_id');
 
-            $table->foreign('venue_table_id')->references('id')->on('venue_tables');
+            $table->foreign('venue_table_id')->references('id')->on('venue_tables')->onDelete('cascade');
             $table->timestamps();
         });
     }

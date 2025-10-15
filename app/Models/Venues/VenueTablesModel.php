@@ -2,6 +2,7 @@
 
 namespace App\Models\Venues;
 
+use App\Models\Marketings\MarketingCompaniesMarketingUsersModel;
 use App\Models\Marketings\MarketingUsersModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -39,13 +40,24 @@ class VenueTablesModel extends Model
     }
 
 
-    public function marketingUser()
+    // public function marketingUser()
+    // {
+    //     return $this->morphedByMany(
+    //         MarketingUsersModel::class,
+    //         'model',
+    //         'model_has_event_reservations',
+    //         'event_reservation_id',
+    //         'model_id'
+    //     );
+    // }
+
+    public function marketingUserTables()
     {
         return $this->morphedByMany(
-            MarketingUsersModel::class,
+            MarketingCompaniesMarketingUsersModel::class,
             'model',
-            'model_has_event_reservations',
-            'event_reservation_id',
+            'model_has_venue_tables',
+            'venue_table_id',
             'model_id'
         );
     }

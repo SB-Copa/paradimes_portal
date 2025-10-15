@@ -18,8 +18,8 @@ return new class extends Migration
             $table->uuid('event_reservation_ticket_unique_key')->unique();
             // $table->integer('quantity');
 
-            $table->foreign('event_reservation_id')->references('id')->on('event_reservations')->delete('cascade');
-            $table->foreign('event_ticket_type_id')->references('id')->on('event_ticket_types')->delete('cascade');
+            $table->foreign('event_reservation_id')->references('id')->on('event_reservations')->onDelete('cascade');
+            $table->foreign('event_ticket_type_id')->references('id')->on('event_ticket_types')->onDelete('cascade');
 
             $table->timestamps();
 

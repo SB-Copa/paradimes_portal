@@ -5,6 +5,8 @@ namespace App\Models\Events;
 use App\Models\Marketings\MarketingCompaniesMarketingUsersModel;
 use App\Models\Marketings\MarketingUsersModel;
 use App\Models\Venues\VenuesModel;
+use App\Models\Venues\VenueTableNamesModel;
+use App\Models\Venues\VenueTablesModel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +22,7 @@ class EventsModel extends Model
     protected $table = 'events';
 
 
-       protected $fillable = [
+    protected $fillable = [
         'event_unique_id',
         'name',
         'title',
@@ -46,7 +48,52 @@ class EventsModel extends Model
                 $model->event_unique_id = (string) Str::uuid();
             }
         });
+
+        static::deleting(function ($pivot) {
+            // When a pivot record is deleted
+
+            $venues = EventsVenuesModel::where('event_id', '=', $pivot->id)->get();
+
+            foreach ($venues as $key_venue => $key_value) {
+                $venueTables = VenueTablesModel::where('venue_id', '=', $key_value->venue_id)->get();
+                if ($venueTables) {
+                    foreach ($venueTables as $venueTables_key => $venueTables_value) {
+
+                        if ($venueTables_value->venue_table_name_id) {
+
+                            //
+                            $modelHasVenueTables = $venueTables_value->marketingUserTables()->wherePivot('model_id', '=', 1)->wherePivot('model_type', "=", "App\Models\Marketings\MarketingCompaniesMarketingUsersModel")->first();
+
+                            $venueTableName = VenueTableNamesModel::whereHas(
+                                'marketingUserTables',
+                                function ($query) use ($modelHasVenueTables) {
+                                    $query->where('model_type', '=', $modelHasVenueTables['pivot']['model_type'])->where('model_id', '=', $modelHasVenueTables['pivot']['model_id']);
+                                }
+                            )
+                            ->where('id', '=', $venueTables_value->venue_table_name_id)
+                            ->first();
+
+                            if ($venueTableName) {
+                                $venueTableName->venueTableRequirements()->delete();
+                                $venueTableName->delete();
+                            }
+                        } else {
+                            $venueTable = VenueTablesModel::find($venueTables_value->venue_table_id);
+                            if ($venueTable) {
+                                $venueTable->venueTableRequirements()->delete();
+                                $venueTable->delete();
+                            }
+                        }
+                    }
+                }
+            }
+
+            EventsVenuesModel::where('event_id', '=', $pivot->id)->delete();
+        });
     }
+
+
+
 
     public function modelHasEvents()
     {
@@ -70,20 +117,23 @@ class EventsModel extends Model
 
     // }
 
-    public function venues(){
-        return $this->belongsToMany(VenuesModel::class,'events_venues','event_id','venue_id');
+    public function venues()
+    {
+        return $this->belongsToMany(VenuesModel::class, 'events_venues', 'event_id', 'venue_id');
     }
 
-    public function eventType(){
-        return $this->belongsTo(EventTypesModel::class,'event_type_id','id');
+    public function eventType()
+    {
+        return $this->belongsTo(EventTypesModel::class, 'event_type_id', 'id');
     }
 
-    public function eventTicketTypes(){
-        return $this->hasMany(EventTicketTypesModel::class,'event_id','id');
+    public function eventTicketTypes()
+    {
+        return $this->hasMany(EventTicketTypesModel::class, 'event_id', 'id');
     }
 
-    public function eventReservations(){
-        return $this->hasMany(EventReservationsModel::class,'event_id','id');
+    public function eventReservations()
+    {
+        return $this->hasMany(EventReservationsModel::class, 'event_id', 'id');
     }
-
 }

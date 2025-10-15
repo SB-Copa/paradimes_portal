@@ -19,7 +19,7 @@ return new class extends Migration
             $table->dateTime('entered_datetime')->nullable();
             $table->timestamps();
 
-            $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations');
+            $table->foreign('venue_table_reservation_id')->references('id')->on('venue_table_reservations')->onDelete('cascade');
         });
     }
 

@@ -158,24 +158,33 @@ class EventsController extends Controller
                     }
                 }
 
-                $venue = VenuesModel::create([
-                    'name' => $venue_value['name'],
-                    'address' => $venue_value['address'] ?? null,
-                    'region_id' => $venue_value['region_id'],
-                    'province_id' => $venue_value['province_id'],
-                    'municipality_id' => $venue_value['municipality_id'],
-                    'barangay_id' => $venue_value['barangay_id'],
-                    'contact_number' => $venue_value['contact_number'],
-                    'email' => $venue_value['email'] ?? null,
-                    'websites' => $venue_value['websites'] ?? null, // should be JSON cast in your model
-                    'capacity' => $venue_value['capacity'],
-                    'user_count' => $venue_value['user_count'],
-                    'table_count' => $venue_value['table_count'],
-                    'menu' => $venue_value['menu'] ?? null,
-                    'about' => $venue_value['about'] ?? null,
-                    'venue_status_id' => $venue_value['venue_status_id'],
+                $venue = VenuesModel::firstOrCreate(
+                    [
+                        'name' => $venue_value['name'],
+                        'region_id' => $venue_value['region_id'],
+                        'province_id' => $venue_value['province_id'],
+                        'municipality_id' => $venue_value['municipality_id'],
+                        'barangay_id' => $venue_value['barangay_id'],
+                    ],
+                    [
+                        'name' => $venue_value['name'],
+                        'address' => $venue_value['address'] ?? null,
+                        'region_id' => $venue_value['region_id'],
+                        'province_id' => $venue_value['province_id'],
+                        'municipality_id' => $venue_value['municipality_id'],
+                        'barangay_id' => $venue_value['barangay_id'],
+                        'contact_number' => $venue_value['contact_number'],
+                        'email' => $venue_value['email'] ?? null,
+                        'websites' => $venue_value['websites'] ?? null, // should be JSON cast in your model
+                        'capacity' => $venue_value['capacity'],
+                        'user_count' => $venue_value['user_count'],
+                        'table_count' => $venue_value['table_count'],
+                        'menu' => $venue_value['menu'] ?? null,
+                        'about' => $venue_value['about'] ?? null,
+                        'venue_status_id' => $venue_value['venue_status_id'],
 
-                ]);
+                    ]
+                );
 
 
                 //count the number of tables
@@ -209,8 +218,6 @@ class EventsController extends Controller
                                 'price' => $venue_table_requirements_value['price'],
                                 'capacity' => $venue_table_requirements_value['capacity'],
                             ]);
-
-                         
                         }
                     }
 
@@ -227,7 +234,7 @@ class EventsController extends Controller
 
 
                         $modelHasVenueTables = ModelHasVenueTables::firstOrCreate([
-                            'model_type' => 'App\Models\Marketings\MarketingUsersModel',
+                            'model_type' => 'App\Models\Marketings\MarketingCompaniesMarketingUsersModel',
                             'model_id' => '1',
                             'venue_table_id' => $venueTables->id,
                         ]);
@@ -369,7 +376,7 @@ class EventsController extends Controller
             $modelHasEvents = ModelHasEvents::create([
                 // 'model_type' => get_class(Auth::user()),
                 // 'model_id' => Auth::user()->id,
-                'model_type' => 'App\Models\Marketings\MarketingUsersModel',
+                'model_type' => 'App\Models\Marketings\MarketingCompaniesMarketingUsersModel',
                 'model_id' => 1,
                 'event_id' => $event->id
             ]);
@@ -541,23 +548,14 @@ class EventsController extends Controller
             ], 500);
         }
     }
-    
+
 
     public function deleteSpecificEvent($eventID)
     {
         try {
-          
-            $marketingUsers = MarketingUsersModel::with([
-                // 'modelHasEvents.eventReservations.morphToUser',
-                // 'modelHasEvents.eventReservations.eventReservationTickets.eventReservationTicketGuests',
-                //venues
-                'modelHasTableNames',
 
-            ])
-            ->get();
-           
-            return response()->json($marketingUsers);
-            
+            $event = EventsModel::find($eventID);
+
             if (!$event) {
                 return response()->json([
                     'success' => false,
@@ -568,7 +566,7 @@ class EventsController extends Controller
 
             $event->delete();
 
-           
+
             return response()->json([
                 'success' => true,
                 'message' => 'Event deleted successfully.'
