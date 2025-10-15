@@ -25,7 +25,7 @@ class VerifyCsrfToken extends Middleware
         '/auth/login', 
         '/admin/login',      
         '/admin/logout',
-        'guest/*', //api.php
-        'admin/*' //api.php
+        '/api/guest/*', //api.php
+        '/api/admin/*' //api.php
     ];
 }
