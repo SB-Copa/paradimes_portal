@@ -34,6 +34,7 @@ export default function TicketCard({ ticket, eventName, venueId }: TicketCardPro
             })
         }
     }
+    
 
     const cartTicket = getTicketCartItem(ticket.id)
 
