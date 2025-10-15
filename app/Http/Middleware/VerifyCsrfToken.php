@@ -25,8 +25,7 @@ class VerifyCsrfToken extends Middleware
         '/auth/login', 
         '/admin/login',      
         '/admin/logout',
-        '/api/sent-sms/webhook', //added by dreii
-        '/api/guest/*',
-        '/api/admin/*'
+        'guest/*', //api.php
+        'admin/*' //api.php
     ];
 }
