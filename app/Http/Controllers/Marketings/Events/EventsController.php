@@ -659,7 +659,7 @@ class EventsController extends Controller
                 'venues.cityMunicipality',
                 'venues.barangay',
                 'venues.venueTableNames.venueTableRequirements',
-                'venues.venueTableNames.venueTables',
+                'venues.venueTableNames.venueTables.tableStatus',
                 'eventType'
             ])
                 ->whereHas('venues', function ($query) use ($venueID) {
@@ -723,7 +723,7 @@ class EventsController extends Controller
                             'venueTableNames' => function ($query) use ($venueTableNameID) {
                                 $query->where('venue_table_names.id', '=', $venueTableNameID)->with([
                                     'venueTableRequirements',
-                                    'venueTables'
+                                    'venueTables.tableStatus'
                                 ]);
                             },
                             'venueStatus',
@@ -762,7 +762,7 @@ class EventsController extends Controller
                             'venueTableNames' => function ($query) use ($venueTableNameID) {
                                 $query->where('venue_table_names.id', '=', $venueTableNameID)->with([
                                     'venueTableRequirements',
-                                    'venueTables'
+                                    'tableStatus.tableStatus'
                                 ]);
                             },
                             'venueStatus',
@@ -804,7 +804,9 @@ class EventsController extends Controller
                                 $query->where('venue_table_names.id', '=', $venueTableNameID)->with([
                                     'venueTableRequirements',
                                     'venueTables' => function ($query) use ($venueTableID) {
-                                        $query->where('venue_tables.id', '=', $venueTableID);
+                                        $query->where('venue_tables.id', '=', $venueTableID)->with([
+                                            'tableStatus'
+                                        ]);
                                     }
                                 ]);
                             },
