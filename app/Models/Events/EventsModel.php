@@ -56,6 +56,7 @@ class EventsModel extends Model
 
             foreach ($venues as $key_venue => $key_value) {
                 $venueTables = VenueTablesModel::where('venue_id', '=', $key_value->venue_id)->get();
+
                 if ($venueTables) {
                     foreach ($venueTables as $venueTables_key => $venueTables_value) {
 
