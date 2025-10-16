@@ -16,19 +16,12 @@ return [
     */
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
-
     'allowed_methods' => ['*'],
-
-    'allowed_origins' => ['https://localhost:3000'], // ['http://localhost:3000'], // your frontend URL
-
+    'allowed_origins' => ['https://localhost:3000', 'https://staging.portl.com.ph'],
     'allowed_origins_patterns' => [],
-
     'allowed_headers' => ['*'],
-
     'exposed_headers' => [],
-
     'max_age' => 0,
-
     'supports_credentials' => true,
 
 ];
