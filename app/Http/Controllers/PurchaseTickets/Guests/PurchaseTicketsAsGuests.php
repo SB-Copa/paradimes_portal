@@ -521,10 +521,11 @@ class PurchaseTicketsAsGuests extends Controller
 
                                     // Lock the specific venue table row
                                     $venueTableReservations = VenueTableReservationsModel::join('venue_tables', 'venue_table_reservations.venue_id', '=', 'venue_tables.id')
-                                        ->where('venue_tables.id', $venue_table_reservations_value['venue_table_id'])
+                                        ->where('venue_table_reservations.venue_table_id', $venue_table_reservations_value['venue_table_id'])
+                                        ->where('venue_table_reservations.venue_id','=',$venue_table_reservations_value['venue_id'])
                                         ->lockForUpdate()
                                         ->first();
-
+                               
                                     // Already reserved
                                     if ($venueTableReservations) {
                                         DB::rollBack();
