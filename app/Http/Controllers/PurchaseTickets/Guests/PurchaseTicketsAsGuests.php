@@ -549,7 +549,9 @@ class PurchaseTicketsAsGuests extends Controller
                                         ]
                                     );
 
-                                    $venueTables = VenueTablesModel::where('venue_id','=',$venue_table_reservations_value['venue_id'])->update([
+                                    $venueTables = VenueTablesModel::where('venue_id','=',$venue_table_reservations_value['venue_id'])
+                                    ->where('venue_tables.id','=',$venue_table_reservations_value['venue_table_id'])
+                                    ->update([
                                             'venue_table_status_id' => 2,
                                     ]);
 
